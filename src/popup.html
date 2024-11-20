@@ -3,18 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Customizable Fields</title>
+  <title>Auto Form Filler</title>
   <link rel="stylesheet" href="popup.css">
 </head>
 <body>
   <div id="app">
-    <h2>Customizable Data Fields</h2>
+    <h2>Profiles and Data</h2>
     <div>
       <label for="profile-selector">Active Profile:</label>
       <select id="profile-selector"></select>
       <button id="create-profile">Create Profile</button>
       <button id="delete-profile">Delete Profile</button>
     </div>
+    <h3>Customizable Data Fields</h3>
     <button id="fetch-linkedin-data">Extract LinkedIn Data</button>
     <form id="custom-field-form">
       <input type="text" id="field-name" placeholder="Field Name" required />
@@ -23,6 +24,22 @@
     </form>
     <h3>Stored Fields:</h3>
     <ul id="field-list"></ul>
+    <h3>Form Field Mapping</h3>
+    <form id="field-mapping-form">
+      <label for="linkedin-field">LinkedIn Field:</label>
+      <select id="linkedin-field">
+        <option value="name">Name</option>
+        <option value="headline">Headline</option>
+        <option value="experiences">Experiences</option>
+        <option value="education">Education</option>
+        <option value="skills">Skills</option>
+      </select>
+      <label for="form-field-name">Form Field Name:</label>
+      <input type="text" id="form-field-name" placeholder="Target Field Name" required />
+      <button type="submit">Add Mapping</button>
+    </form>
+    <h3>Current Mappings:</h3>
+    <ul id="mapping-list"></ul>
   </div>
   <script src="popup.js"></script>
 </body>
