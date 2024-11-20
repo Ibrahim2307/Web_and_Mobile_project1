@@ -3,26 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Form Data Manager</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>Customizable Fields</title>
+  <link rel="stylesheet" href="popup.css">
 </head>
 <body>
   <div id="app">
-    <h1>Manage Form Data</h1>
-        <div id="profile-management">
-      <select id="profile-select"></select>
-      <button id="create-profile-btn">Create Profile</button>
-      <button id="delete-profile-btn">Delete Profile</button>
-    </div>
-
-    <ul id="data-list"></ul>
-    <button id="add-field-btn">Add New Field</button>
-    <form id="data-form" style="display: none;">
-      <input type="text" id="field-key" placeholder="Field Name" required />
+    <h2>Customizable Data Fields</h2>
+    <button id="fetch-linkedin-data">Extract LinkedIn Data</button>
+    <form id="custom-field-form">
+      <input type="text" id="field-name" placeholder="Field Name" required />
       <input type="text" id="field-value" placeholder="Field Value" required />
-      <button type="submit">Save</button>
-      <button type="button" id="cancel-btn">Cancel</button>
+      <button type="submit">Add/Update Field</button>
     </form>
+    <h3>Stored Fields:</h3>
+    <ul id="field-list"></ul>
   </div>
   <script src="popup.js"></script>
 </body>
