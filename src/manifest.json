@@ -1,14 +1,19 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "Auto Form Filler",
-  "version": "1.0",
-  "description": "Description of your extension",
-  "permissions": ["storage", "activeTab"],
-  "background": {
-    "scripts": ["popup.js"],
-    "persistent": false
+  "version": "1.1",
+  "description": "An intelligent form filler for job applications.",
+  "permissions": ["storage", "scripting", "activeTab"],
+  "host_permissions": ["https://www.linkedin.com/*"],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
   },
-  "browser_action": {
-    "default_popup": "popup.html"
+  "background": {
+    "service_worker": "background.js"
   }
 }
