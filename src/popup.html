@@ -40,6 +40,21 @@
     </form>
     <h3>Current Mappings:</h3>
     <ul id="mapping-list"></ul>
+    <h3>Job Application Tracking Dashboard</h3>
+    <form id="job-tracking-form">
+      <input type="text" id="company-name" placeholder="Company Name" required />
+      <input type="text" id="job-title" placeholder="Job Title" required />
+      <input type="date" id="application-date" required />
+      <select id="application-status">
+        <option value="Applied">Applied</option>
+        <option value="Interviewing">Interviewing</option>
+        <option value="Offered">Offered</option>
+        <option value="Rejected">Rejected</option>
+      </select>
+      <button type="submit">Add Job</button>
+    </form>
+    <h3>Tracked Applications:</h3>
+    <ul id="job-tracking-list"></ul>
   </div>
   <script src="popup.js"></script>
 </body>
