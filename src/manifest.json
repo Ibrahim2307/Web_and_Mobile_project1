@@ -1,12 +1,12 @@
 {
   "manifest_version": 3,
   "name": "Auto Form Filler",
-  "version": "1.1",
+  "version": "1.2",
   "description": "An intelligent form filler for job applications.",
   "permissions": ["storage", "scripting", "activeTab"],
   "host_permissions": ["https://www.linkedin.com/*"],
   "action": {
-    "default_popup": "popup.html"
+    "default_popup": "popup/popup.html"
   },
   "background": {
     "service_worker": "background.js"
