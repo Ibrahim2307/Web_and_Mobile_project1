@@ -11,7 +11,10 @@ body {
 }
 
 h2, h3 {
-  color: #4a90e2;
+  font-family: 'Lora', serif;
+  font-weight: 700;
+  margin: 20px 0 10px;
+  font-size: 1.4em;
 }
 
 #app {
