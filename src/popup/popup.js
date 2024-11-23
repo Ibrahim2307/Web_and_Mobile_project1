@@ -21,3 +21,25 @@ const savedFormsList = document.getElementById("saved-forms-list");
 const exportDataBtn = document.getElementById("export-data");
 const importDataInput = document.getElementById("import-data");
 const emailDataBtn = document.getElementById("email-data");
+
+// Initialize Data on Popup Load
+document.addEventListener("DOMContentLoaded", async () => {
+  const data = await chrome.storage.local.get(["profiles", "activeProfile", "fieldMappings", "jobApplications", "savedForms"]);
+  const profiles = data.profiles || {};
+  const activeProfile = data.activeProfile || "Default";
+  const fieldMappings = data.fieldMappings || {};
+  const jobApplications = data.jobApplications || [];
+  const savedForms = data.savedForms || [];
+
+  // Ensure at least one profile exists
+  if (!profiles[activeProfile]) {
+    profiles[activeProfile] = {};
+    await chrome.storage.local.set({ profiles, activeProfile });
+  }
+
+  updateProfileSelector(profiles, activeProfile);
+  updateFieldList(profiles[activeProfile]);
+  updateMappingList(fieldMappings);
+  updateJobTrackingList(jobApplications);
+  updateSavedFormsList(savedForms);
+});
