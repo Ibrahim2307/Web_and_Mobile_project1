@@ -8,7 +8,14 @@
 </head>
 <body>
   <div id="app">
-    <h2>Profiles and Data</h2>
+    <div class="section-header">
+      <h2>Profiles and Data</h2>
+      <label class="switch">
+        <input type="checkbox" id="darkModeToggle">
+        <span class="slider round"></span>
+      </label>
+      <span id="toggle-label">Light</span>
+    </div>
     <div>
       <label for="profile-selector">Active Profile:</label>
       <select id="profile-selector"></select>
