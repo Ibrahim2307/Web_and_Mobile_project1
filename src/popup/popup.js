@@ -19,8 +19,11 @@ const jobTrackingList = document.getElementById("job-tracking-list");
 const saveFormBtn = document.getElementById("save-form");
 const savedFormsList = document.getElementById("saved-forms-list");
 const exportDataBtn = document.getElementById("export-data");
-const importDataInput = document.getElementById("import-data");
+const importDataBtn = document.getElementById("import-data");
 const emailDataBtn = document.getElementById("email-data");
+const hiddenFileInput = document.createElement("input"); // Hidden file input element
+hiddenFileInput.type = "file";
+hiddenFileInput.accept = "application/json";
 
 // Initialize Data on Popup Load
 document.addEventListener("DOMContentLoaded", async () => {
