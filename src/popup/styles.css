@@ -51,8 +51,9 @@ button:hover {
 }
 
 button:active {
-  background-color: #2a5d8a;
+  background: linear-gradient(to right, #356ac3, #214a8b);
   transform: translateY(0);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 input[type="text"],
