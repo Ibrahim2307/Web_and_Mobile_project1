@@ -34,8 +34,8 @@ h2, h3 {
 }
 
 button {
-  background-color: #4a90e2;
-  color: #fff;
+  background: linear-gradient(to right, #6a11cb, #2575fc);
+  color: white;
   border: none;
   padding: 10px 15px;
   font-size: 14px;
