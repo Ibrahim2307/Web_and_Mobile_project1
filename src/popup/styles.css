@@ -2,12 +2,14 @@
 
 body {
   font-family: 'Poppins', sans-serif;
-  margin: 20px;
+  margin: 0;
   padding: 20px;
   width: 380px;
   height: auto;
   background: linear-gradient(to bottom right, #ffffff, #f1f3f6);
   color: #333;
+  line-height: 1.8;
+  box-sizing: border-box;
 }
 
 h2, h3 {
@@ -22,14 +24,13 @@ h2, h3 {
 }
 
 #app {
-  width: 100%;
-  max-width: 360px;
-  margin: 0 auto;
-  padding: 10px;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-  box-sizing: border-box;
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 button {
