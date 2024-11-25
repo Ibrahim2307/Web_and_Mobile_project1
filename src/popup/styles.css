@@ -24,10 +24,41 @@ h2, h3 {
 }
 
 #app {
-  max-width: 800px;
-  margin: auto;
-  padding: 20px;
-  background: #ffffff;
+  width: 100%;
+  max-width: 360px;
+  margin: 0 auto;
+  padding: 10px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+}
+
+label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+  font-size: 0.9em;
+  color: #555;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; 
+  min-width: 200px;
+  margin-bottom: 20px;
+  padding: 15px;
+  background: linear-gradient(to bottom, #ffffff, #f7f9fc);
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+input[type="text"], input[type="date"], select, button {
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 12px;
   border: 1px solid #ddd;
   border-radius: 6px;
   font-size: 0.9em;
@@ -35,6 +66,12 @@ h2, h3 {
   background: #fdfdfd;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 8px rgba(74, 144, 226, 0.5);
 }
 
 button {
@@ -70,9 +107,12 @@ select {
   width: calc(100% - 22px);
   margin: 5px 0;
   padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 14px;
+  font-size: 0.85em;
+  border-radius: 6px;
+}
+
+button#email-data {
+  margin-right: 0;
 }
 
 ul {
