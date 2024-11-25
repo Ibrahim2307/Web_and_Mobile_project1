@@ -34,7 +34,6 @@ h2, h3 {
   box-sizing: border-box;
 }
 
-/* Form Elements */
 label {
   font-weight: bold;
   display: block;
@@ -75,7 +74,6 @@ input:focus, select:focus {
   box-shadow: 0 0 8px rgba(74, 144, 226, 0.5);
 }
 
-/* Button Styles */
 button {
   background: linear-gradient(to right, #6a11cb, #2575fc);
   color: white;
@@ -103,7 +101,6 @@ button:active {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-/* Custom Button Styles */
 #save-form {
   background: linear-gradient(to right, #28a745, #218838);
   font-weight: bold;
@@ -118,9 +115,12 @@ button#export-data, button#import-data, button#email-data {
   margin-right: 5px;
   text-align: center;
   padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 14px;
+  font-size: 0.85em;
+  border-radius: 6px;
+}
+
+button#email-data {
+  margin-right: 0;
 }
 
 ul {
@@ -129,11 +129,47 @@ ul {
   margin: 0;
 }
 
-ul li {
-  background-color: #f1f1f1;
-  margin: 5px 0;
-  padding: 10px;
-  border-radius: 5px;
+li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  background: #fafafa;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  font-family: 'Poppins', sans-serif;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+li:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+li button {
+  width: auto;
+  padding: 6px 12px;
+  margin-left: 8px;
+  font-size: 0.85em;
+  background: linear-gradient(to right, #ff5f6d, #ffc371);
+  color: white;
+  border-radius: 6px;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+li button:hover {
+  background: linear-gradient(to right, #e3425b, #ff9e4f);
+}
+
+div#app > h3 {
+  margin-top: 20px;
+  font-size: 1.1em;
+  font-weight: 600;
+  color: #555;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 6px;
 }
 
 label {
