@@ -21,7 +21,8 @@ const savedFormsList = document.getElementById("saved-forms-list");
 const exportDataBtn = document.getElementById("export-data");
 const importDataBtn = document.getElementById("import-data");
 const emailDataBtn = document.getElementById("email-data");
-const hiddenFileInput = document.createElement("input"); // Hidden file input element
+const toggle = document.getElementById("darkModeToggle");
+const hiddenFileInput = document.createElement("input");
 hiddenFileInput.type = "file";
 hiddenFileInput.accept = "application/json";
 
@@ -45,4 +46,23 @@ document.addEventListener("DOMContentLoaded", async () => {
   updateMappingList(fieldMappings);
   updateJobTrackingList(jobApplications);
   updateSavedFormsList(savedForms);
+});
+
+createProfileBtn.addEventListener("click", async () => {
+  const profileName = prompt("Enter a name for the new profile:");
+  if (!profileName) return;
+
+  const data = await chrome.storage.local.get("profiles");
+  const profiles = data.profiles || {};
+
+  if (profiles[profileName]) {
+    alert("Profile already exists!");
+    return;
+  }
+
+  profiles[profileName] = {};
+  await chrome.storage.local.set({ profiles });
+  await chrome.storage.local.set({ activeProfile: profileName });
+  updateProfileSelector(profiles, profileName);
+  updateFieldList(profiles[profileName]);
 });
