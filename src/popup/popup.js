@@ -21,7 +21,8 @@ const savedFormsList = document.getElementById("saved-forms-list");
 const exportDataBtn = document.getElementById("export-data");
 const importDataBtn = document.getElementById("import-data");
 const emailDataBtn = document.getElementById("email-data");
-const hiddenFileInput = document.createElement("input");
+const hiddenFileInput = document.createElement("input"); // Hidden file input element
+const autoFillButton = document.createElement("button");
 hiddenFileInput.type = "file";
 hiddenFileInput.accept = "application/json";
 
@@ -100,3 +101,71 @@ fetchLinkedInDataBtn.addEventListener("click", async () => {
     }
   });
 });
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const fieldName = fieldNameInput.value.trim();
+  const fieldValue = fieldValueInput.value.trim();
+  if (!fieldName || !fieldValue) return;
+
+  const data = await chrome.storage.local.get(["profiles", "activeProfile"]);
+  const profiles = data.profiles || {};
+  const activeProfile = data.activeProfile;
+
+  profiles[activeProfile][fieldName] = fieldValue;
+  await chrome.storage.local.set({ profiles });
+  fieldNameInput.value = "";
+  fieldValueInput.value = "";
+  updateFieldList(profiles[activeProfile]);
+});
+
+function updateFieldList(fields) {
+  fieldList.innerHTML = "";
+  for (const [name, value] of Object.entries(fields)) {
+    const listItem = document.createElement("li");
+    listItem.textContent = `${name}: ${value}`;
+    fieldList.appendChild(listItem);
+  }
+}
+
+mappingForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const linkedinField = linkedinFieldSelect.value;
+  const formFieldName = formFieldNameInput.value.trim();
+  if (!linkedinField || !formFieldName) return;
+
+  const data = await chrome.storage.local.get("fieldMappings");
+  const fieldMappings = data.fieldMappings || {};
+  fieldMappings[formFieldName] = linkedinField;
+  await chrome.storage.local.set({ fieldMappings });
+  formFieldNameInput.value = "";
+  updateMappingList(fieldMappings);
+});
+
+function updateMappingList(mappings) {
+  mappingList.innerHTML = "";
+  for (const [formField, linkedinField] of Object.entries(mappings)) {
+    const listItem = document.createElement("li");
+    listItem.textContent = `${linkedinField} : ${formField}`;
+    const removeButton = document.createElement("button");
+    removeButton.textContent = "Remove";
+    removeButton.className = "remove-mapping-btn";
+    removeButton.dataset.formField = formField; // Attach the form field as a data attribute
+    listItem.appendChild(removeButton);
+    mappingList.appendChild(listItem);
+  }
+}
+
+mappingList.addEventListener("click", async (e) => {
+  if (e.target.classList.contains("remove-mapping-btn")) {
+    const formFieldToRemove = e.target.dataset.formField;
+    const data = await chrome.storage.local.get("fieldMappings");
+    const fieldMappings = data.fieldMappings || {};
+    delete fieldMappings[formFieldToRemove];
+    await chrome.storage.local.set({ fieldMappings });
+    updateMappingList(fieldMappings);
+  }
+});
+
