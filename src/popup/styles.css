@@ -172,7 +172,6 @@ div#app > h3 {
   padding-bottom: 6px;
 }
 
-/* Animations */
 button, input, li {
   animation: fadeIn 0.6s ease-in-out;
 }
@@ -188,7 +187,6 @@ button, input, li {
   }
 }
 
-/* Media Queries */
 @media (max-width: 400px) {
   body {
     width: auto;

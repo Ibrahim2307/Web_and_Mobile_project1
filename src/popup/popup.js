@@ -21,12 +21,10 @@ const savedFormsList = document.getElementById("saved-forms-list");
 const exportDataBtn = document.getElementById("export-data");
 const importDataBtn = document.getElementById("import-data");
 const emailDataBtn = document.getElementById("email-data");
-const toggle = document.getElementById("darkModeToggle");
 const hiddenFileInput = document.createElement("input");
 hiddenFileInput.type = "file";
 hiddenFileInput.accept = "application/json";
 
-// Initialize Data on Popup Load
 document.addEventListener("DOMContentLoaded", async () => {
   const data = await chrome.storage.local.get(["profiles", "activeProfile", "fieldMappings", "jobApplications", "savedForms"]);
   const profiles = data.profiles || {};
@@ -35,7 +33,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const jobApplications = data.jobApplications || [];
   const savedForms = data.savedForms || [];
 
-  // Ensure at least one profile exists
   if (!profiles[activeProfile]) {
     profiles[activeProfile] = {};
     await chrome.storage.local.set({ profiles, activeProfile });
@@ -65,4 +62,21 @@ createProfileBtn.addEventListener("click", async () => {
   await chrome.storage.local.set({ activeProfile: profileName });
   updateProfileSelector(profiles, profileName);
   updateFieldList(profiles[profileName]);
+});
+
+deleteProfileBtn.addEventListener("click", async () => {
+  const data = await chrome.storage.local.get(["profiles", "activeProfile"]);
+  const profiles = data.profiles || {};
+  const activeProfile = data.activeProfile;
+
+  if (Object.keys(profiles).length === 1) {
+    alert("You must have at least one profile.");
+    return;
+  }
+
+  delete profiles[activeProfile];
+  const newActiveProfile = Object.keys(profiles)[0];
+  await chrome.storage.local.set({ profiles, activeProfile: newActiveProfile });
+  updateProfileSelector(profiles, newActiveProfile);
+  updateFieldList(profiles[newActiveProfile]);
 });
