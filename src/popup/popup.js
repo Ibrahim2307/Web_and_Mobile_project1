@@ -80,3 +80,23 @@ deleteProfileBtn.addEventListener("click", async () => {
   updateProfileSelector(profiles, newActiveProfile);
   updateFieldList(profiles[newActiveProfile]);
 });
+
+profileSelector.addEventListener("change", async (e) => {
+  const selectedProfile = e.target.value;
+  const data = await chrome.storage.local.get("profiles");
+  const profiles = data.profiles || {};
+  await chrome.storage.local.set({ activeProfile: selectedProfile });
+  updateFieldList(profiles[selectedProfile]);
+});
+
+fetchLinkedInDataBtn.addEventListener("click", async () => {
+  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  chrome.runtime.sendMessage({ action: "extractLinkedInData", tab }, (response) => {
+    console.log(response);
+    if (response?.success) {
+      alert("LinkedIn data extracted and stored successfully!");
+    } else {
+      alert("Failed to extract LinkedIn data.");
+    }
+  });
+});
