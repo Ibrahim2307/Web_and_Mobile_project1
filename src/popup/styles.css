@@ -23,7 +23,7 @@ h2, h3 {
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-#app {
+div {
   width: 100%;
   max-width: 360px;
   margin: 0 auto;
@@ -196,4 +196,105 @@ button, input, li {
     width: 100%;
     margin-bottom: 10px;
   }
+}
+
+body.dark-mode {
+  background: linear-gradient(to bottom right, #1e1e1e, #252525);
+  color: #e0e0e0;
+  outline: none; 
+  box-shadow: none; 
+}
+
+body.dark-mode h2, body.dark-mode h3 {
+  color: #bb86fc;
+  border-bottom: 2px solid #444;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  outline: none; 
+  box-shadow: none; 
+}
+
+body.dark-mode div {
+  background: #1f1f1f;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  border: none; 
+  outline: none; 
+}
+
+body.dark-mode form {
+  background: linear-gradient(to bottom, #292929, #1f1f1f);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border: none; 
+  outline: none; 
+}
+
+body.dark-mode button {
+  background: linear-gradient(to right, #bb86fc, #6200ee);
+  color: #fff;
+  border: none; 
+  outline: none; 
+  box-shadow: none; 
+}
+
+body.dark-mode button:hover {
+  background: linear-gradient(to right, #3700b3, #6200ee);
+  border: none;
+  outline: none;
+  box-shadow: none;
+}
+
+body.dark-mode input[type="text"],
+body.dark-mode input[type="date"],
+body.dark-mode select {
+  background: #333;
+  color: #e0e0e0;
+  border: 1px solid #444;
+  outline: none; 
+  box-shadow: none; 
+}
+
+body.dark-mode input:focus,
+body.dark-mode select:focus {
+  border-color: #bb86fc;
+  box-shadow: 0 0 8px rgba(187, 134, 252, 0.5);
+  outline: none; 
+}
+
+body.dark-mode ul li {
+  background: #292929;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  border: none; 
+  outline: none; 
+}
+
+body.dark-mode li button {
+  background: linear-gradient(to right, #ff616f, #ff9e57);
+  border: none; 
+  outline: none; 
+  box-shadow: none; 
+}
+
+body.dark-mode li button:hover {
+  background: linear-gradient(to right, #e3425b, #f66b3f);
+  border: none;
+  outline: none;
+  box-shadow: none;
+}
+
+body.dark-mode div#app {
+  background: #292929;
+  border: 1px solid #444;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  outline: none; 
+}
+
+
+.toggle-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 10px;
+  background: none;
+  border: none;
+  box-shadow: none;
+  padding: 0;
 }
