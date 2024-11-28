@@ -62,6 +62,13 @@
     </form>
     <h3>Tracked Applications:</h3>
     <ul id="job-tracking-list"></ul>
+     <h3>Automatic Cover Letter Generation</h3>
+    <form id="cover-letter-form">
+      <input type="text" id="job-title-input" placeholder="Job Title" required />
+      <input type="text" id="company-name-input" placeholder="Company Name" required />
+      <textarea id="cover-letter-output" placeholder="Generated Cover Letter" readonly></textarea>
+      <button type="button" id="generate-cover-letter">Generate Cover Letter</button>
+    </form>
     <h3>History Restoring</h3>
     <button id="save-form">Save Current Form</button>
     <h3>Saved Forms:</h3>
