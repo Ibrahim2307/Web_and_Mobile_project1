@@ -21,7 +21,7 @@ const savedFormsList = document.getElementById("saved-forms-list");
 const exportDataBtn = document.getElementById("export-data");
 const importDataBtn = document.getElementById("import-data");
 const emailDataBtn = document.getElementById("email-data");
-const hiddenFileInput = document.createElement("input"); // Hidden file input element
+const hiddenFileInput = document.createElement("input");
 const autoFillButton = document.createElement("button");
 hiddenFileInput.type = "file";
 hiddenFileInput.accept = "application/json";
@@ -152,20 +152,35 @@ function updateMappingList(mappings) {
     const removeButton = document.createElement("button");
     removeButton.textContent = "Remove";
     removeButton.className = "remove-mapping-btn";
-    removeButton.dataset.formField = formField; // Attach the form field as a data attribute
+    removeButton.dataset.formField = formField;
     listItem.appendChild(removeButton);
     mappingList.appendChild(listItem);
   }
 }
 
-mappingList.addEventListener("click", async (e) => {
-  if (e.target.classList.contains("remove-mapping-btn")) {
-    const formFieldToRemove = e.target.dataset.formField;
-    const data = await chrome.storage.local.get("fieldMappings");
-    const fieldMappings = data.fieldMappings || {};
-    delete fieldMappings[formFieldToRemove];
-    await chrome.storage.local.set({ fieldMappings });
-    updateMappingList(fieldMappings);
-  }
-});
+jobTrackingForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
+  const companyName = companyNameInput.value.trim();
+  const jobTitle = jobTitleInput.value.trim();
+  const applicationDate = applicationDateInput.value;
+  const applicationStatus = applicationStatusInput.value;
+
+  if (!companyName || !jobTitle || !applicationDate || !applicationStatus) return;
+
+  const data = await chrome.storage.local.get("jobApplications");
+  const jobApplications = data.jobApplications || [];
+  jobApplications.push({
+    companyName,
+    jobTitle,
+    applicationDate,
+    applicationStatus
+  });
+
+  await chrome.storage.local.set({ jobApplications });
+  companyNameInput.value = "";
+  jobTitleInput.value = "";
+  applicationDateInput.value = "";
+  applicationStatusInput.value = "Applied";
+  updateJobTrackingList(jobApplications);
+});
