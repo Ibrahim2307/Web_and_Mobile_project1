@@ -21,11 +21,11 @@ const savedFormsList = document.getElementById("saved-forms-list");
 const exportDataBtn = document.getElementById("export-data");
 const importDataBtn = document.getElementById("import-data");
 const emailDataBtn = document.getElementById("email-data");
-const hiddenFileInput = document.createElement("input");
-const autoFillButton = document.createElement("button");
+const toggle = document.getElementById("darkModeToggle");
+const hiddenFileInput = document.createElement("input"); // Hidden file input element
+const generateCoverLetterBtn = document.getElementById("generate-cover-letter");
 hiddenFileInput.type = "file";
 hiddenFileInput.accept = "application/json";
-
 document.addEventListener("DOMContentLoaded", async () => {
   const data = await chrome.storage.local.get(["profiles", "activeProfile", "fieldMappings", "jobApplications", "savedForms"]);
   const profiles = data.profiles || {};
@@ -33,7 +33,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const fieldMappings = data.fieldMappings || {};
   const jobApplications = data.jobApplications || [];
   const savedForms = data.savedForms || [];
-
   if (!profiles[activeProfile]) {
     profiles[activeProfile] = {};
     await chrome.storage.local.set({ profiles, activeProfile });
@@ -45,7 +44,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   updateJobTrackingList(jobApplications);
   updateSavedFormsList(savedForms);
 });
-
 createProfileBtn.addEventListener("click", async () => {
   const profileName = prompt("Enter a name for the new profile:");
   if (!profileName) return;
@@ -89,7 +87,6 @@ profileSelector.addEventListener("change", async (e) => {
   await chrome.storage.local.set({ activeProfile: selectedProfile });
   updateFieldList(profiles[selectedProfile]);
 });
-
 fetchLinkedInDataBtn.addEventListener("click", async () => {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   chrome.runtime.sendMessage({ action: "extractLinkedInData", tab }, (response) => {
@@ -101,7 +98,6 @@ fetchLinkedInDataBtn.addEventListener("click", async () => {
     }
   });
 });
-
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -128,7 +124,6 @@ function updateFieldList(fields) {
     fieldList.appendChild(listItem);
   }
 }
-
 mappingForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -148,16 +143,10 @@ function updateMappingList(mappings) {
   mappingList.innerHTML = "";
   for (const [formField, linkedinField] of Object.entries(mappings)) {
     const listItem = document.createElement("li");
-    listItem.textContent = `${linkedinField} : ${formField}`;
-    const removeButton = document.createElement("button");
-    removeButton.textContent = "Remove";
-    removeButton.className = "remove-mapping-btn";
-    removeButton.dataset.formField = formField;
-    listItem.appendChild(removeButton);
+    listItem.textContent = `Form Field: ${formField} -> LinkedIn Field: ${linkedinField}`;
     mappingList.appendChild(listItem);
   }
 }
-
 jobTrackingForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -184,3 +173,20 @@ jobTrackingForm.addEventListener("submit", async (e) => {
   applicationStatusInput.value = "Applied";
   updateJobTrackingList(jobApplications);
 });
+
+if (toggle) {
+  const isDarkMode = localStorage.getItem("dark-mode") === "true";
+  if (isDarkMode) {
+    document.body.classList.add("dark-mode");
+    toggle.checked = true;
+  }
+  toggle.addEventListener("change", () => {
+    if (toggle.checked) {
+      document.body.classList.add("dark-mode");
+      localStorage.setItem("dark-mode", "true");
+    } else {
+      document.body.classList.remove("dark-mode");
+      localStorage.setItem("dark-mode", "false");
+    }
+  });
+}
