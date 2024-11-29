@@ -7,76 +7,42 @@
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
-  <div id="app">
-    <div class="section-header">
-      <h2>Profiles and Data</h2>
-      <label class="switch">
-        <input type="checkbox" id="darkModeToggle">
-        <span class="slider round"></span>
-      </label>
-      <span id="toggle-label">Dark Mode</span>
+  <h3>Save Your Details</h3>
+  <form id="userForm">
+    <label>First Name</label><input id="firstName" type="text">
+    <label>Last Name</label><input id="lastName" type="text">
+    <label>Experience</label><input id="experience" type="text">
+    <label>Skills</label><input id="skills" type="text">
+    <label>Education</label><input id="education" type="text">
+    <label>Email Address</label><input id="email" type="email">
+    <label>Languages</label><input id="languages" type="text">
+    <label>Certificate Link</label><input id="certificateLink" type="text">
+    <label>Portfolio Links</label><input id="portfolioLinks" type="text">
+    <label>Personal Summary</label><textarea id="personalSummary"></textarea>
+    <div id="customFieldsContainer">
+      <h4>Custom Fields</h4>
     </div>
-    <div>
-      <label for="profile-selector">Active Profile:</label>
-      <select id="profile-selector"></select>
-      <button id="create-profile">Create Profile</button>
-      <button id="delete-profile">Delete Profile</button>
-    </div>
-    <h3>Customizable Data Fields</h3>
-    <button id="fetch-linkedin-data">Extract LinkedIn Data</button>
-    <form id="custom-field-form">
-      <input type="text" id="field-name" placeholder="Field Name" required />
-      <input type="text" id="field-value" placeholder="Field Value" required />
-      <button type="submit">Add/Update Field</button>
-    </form>
-    <h3>Stored Fields:</h3>
-    <ul id="field-list"></ul>
-    <h3>Form Field Mapping</h3>
-    <form id="field-mapping-form">
-      <label for="linkedin-field">LinkedIn Field:</label>
-      <select id="linkedin-field">
-        <option value="name">Name</option>
-        <option value="headline">Headline</option>
-        <option value="experiences">Experiences</option>
-        <option value="education">Education</option>
-        <option value="skills">Skills</option>
-      </select>
-      <label for="form-field-name">Form Field Name:</label>
-      <input type="text" id="form-field-name" placeholder="Target Field Name" required />
-      <button type="submit">Add Mapping</button>
-    </form>
-    <h3>Current Mappings:</h3>
-    <ul id="mapping-list"></ul>
-    <h3>Job Application Tracking Dashboard</h3>
-    <form id="job-tracking-form">
-      <input type="text" id="company-name" placeholder="Company Name" required />
-      <input type="text" id="job-title" placeholder="Job Title" required />
-      <input type="date" id="application-date" required />
-      <select id="application-status">
-        <option value="Applied">Applied</option>
-        <option value="Interviewing">Interviewing</option>
-        <option value="Offered">Offered</option>
-        <option value="Rejected">Rejected</option>
-      </select>
-      <button type="submit">Add Job</button>
-    </form>
-    <h3>Tracked Applications:</h3>
-    <ul id="job-tracking-list"></ul>
-     <h3>Automatic Cover Letter Generation</h3>
-    <form id="cover-letter-form">
-      <input type="text" id="job-title-input" placeholder="Job Title" required />
-      <input type="text" id="company-name-input" placeholder="Company Name" required />
-      <textarea id="cover-letter-output" placeholder="Generated Cover Letter" readonly></textarea>
-      <button type="button" id="generate-cover-letter">Generate Cover Letter</button>
-    </form>
-    <h3>History Restoring</h3>
-    <button id="save-form">Save Current Form</button>
-    <h3>Saved Forms:</h3>
-    <ul id="saved-forms-list"></ul>
-    <h3>Data Transfer</h3>
-    <button id="import-data">Import Data</button>
-    <button id="export-data">Export Data</button>
-    <button id="email-data">Email Data</button>
+    <button type="submit">Save</button>
+  </form>
+  <button id="addFieldButton">Add Field</button>
+  <button id="autofillButton">Autofill</button>
+  <div id="dataTransferSection">
+    <h4>Data Transfer</h4>
+    <button id="exportDataButton">Export Data</button>
+    <button id="importDataButton">Import Data</button>
+    <input id="importFileInput" type="file" style="display: none;">
+    <button id="sendEmailButton">Send Data via Email</button>
+  </div>
+  <div id="formHistorySection">
+    <h4>Form History</h4>
+    <button id="saveFormButton">Save Current Form</button>
+    <ul id="savedFormsList"></ul>
+  </div>   
+  <div id="profileSection">
+    <h4>Profile Management</h4>
+    <select id="profileSelector"></select>
+    <button id="createProfileButton">Create Profile</button>
+    <button id="loadProfileButton">Load Profile and Autofill</button>
   </div>
   <script src="./popup.js"></script>
 </body>
