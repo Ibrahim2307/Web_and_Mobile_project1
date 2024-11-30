@@ -109,3 +109,130 @@ button:active {
   border-color: #007bff;
   outline: none;
 }
+
+#dataTransferSection {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#dataTransferSection h4 {
+  margin-top: 0;
+  font-size: 16px;
+  color: #333;
+}
+
+#dataTransferSection button {
+  display: inline-block;
+  margin-right: 10px;
+  margin-top: 10px;
+  padding: 10px 15px;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 5px;
+  border: none;
+  background-color: #007bff;
+  color: #fff;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+#dataTransferSection button:hover {
+  background-color: #0056b3;
+}
+
+#dataTransferSection button:active {
+  transform: scale(0.98);
+}
+
+#formHistorySection {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#formHistorySection h4 {
+  margin-top: 0;
+  font-size: 16px;
+  color: #333;
+}
+
+#formHistorySection ul {
+  list-style: none;
+  padding: 0;
+}
+
+#formHistorySection li {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#formHistorySection button {
+  padding: 5px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+}
+
+#formHistorySection button:hover {
+  background-color: #0056b3;
+}
+
+
+#profileSection {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#profileSection h4 {
+  margin-top: 0;
+  font-size: 16px;
+  color: #333;
+}
+
+#profileSelector {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+#createProfileButton {
+  margin-top: 10px;
+  padding: 10px 15px;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 5px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+#createProfileButton:hover {
+  background-color: #0056b3;
+}
+
+#createProfileButton:active {
+  transform: scale(0.98);
+}
