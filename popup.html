@@ -1,16 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Auto Form Filler</title>
-  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="styles.css">
+  <title>Autofill Settings</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 10px; }
+    label { display: block; margin-top: 10px; }
+    input, textarea { width: 100%; padding: 5px; margin-top: 5px; }
+    button { margin-top: 10px; padding: 10px 20px; cursor: pointer; }
+    #addFieldButton { background-color: #28a745; color: #fff; border: none; border-radius: 5px; }
+    #autofillButton { background-color: #007bff; color: #fff; border: none; border-radius: 5px; }
+    .field-group { margin-bottom: 15px; }
+  </style>
 </head>
 <body>
   <h3>Save Your Details</h3>
   <form id="userForm">
     <label>First Name</label><input id="firstName" type="text">
     <label>Last Name</label><input id="lastName" type="text">
+    <label>Position</label><input id="position" type="text">
     <label>Experience</label><input id="experience" type="text">
     <label>Skills</label><input id="skills" type="text">
     <label>Education</label><input id="education" type="text">
@@ -18,11 +26,13 @@
     <label>Languages</label><input id="languages" type="text">
     <label>Certificate Link</label><input id="certificateLink" type="text">
     <label>Portfolio Links</label><input id="portfolioLinks" type="text">
-    <label>Personal Summary</label><textarea id="personalSummary"></textarea>
+    <label>Portfolio Links</label><input id="portfolioLinks" type="text">
+    <label id="personallabel">Personal Summary</label><textarea id="personalSummary"></textarea>
+    <button id="GenerateCoverLetter">GenerateCoverLetter</button>
     <div id="customFieldsContainer">
       <h4>Custom Fields</h4>
     </div>
-    <button type="submit">Save</button>
+    <button id="savebtn" type="submit">Save</button>
   </form>
   <button id="addFieldButton">Add Field</button>
   <button id="autofillButton">Autofill</button>
@@ -44,6 +54,8 @@
     <button id="createProfileButton">Create Profile</button>
     <button id="loadProfileButton">Load Profile and Autofill</button>
   </div>
-  <script src="./popup.js"></script>
+  
+
 </body>
+<script src="popup.js"></script>
 </html>
