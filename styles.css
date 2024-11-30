@@ -1,199 +1,111 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Lora:wght@400;700&display=swap');
-
 body {
-  font-family: 'Poppins', sans-serif;
-  margin: 0;
-  padding: 20px;
-  width: 380px;
-  height: auto;
-  background: linear-gradient(to bottom right, #ffffff, #f1f3f6);
+  font-family: "Arial", sans-serif;
+  padding: 15px;
+  background-color: #f9f9f9;
   color: #333;
-  line-height: 1.8;
-  box-sizing: border-box;
 }
 
-h2, h3 {
-  font-family: 'Lora', serif;
-  font-weight: 700;
-  margin: 20px 0 10px;
-  font-size: 1.4em;
-  color: #444;
-  border-bottom: 2px solid #eee;
-  padding-bottom: 8px;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-#app {
-  width: 100%;
-  max-width: 360px;
-  margin: 0 auto;
-  padding: 10px;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-  box-sizing: border-box;
+h3 {
+  font-size: 20px;
+  color: #007bff;
+  margin-bottom: 15px;
 }
 
 label {
-  font-weight: bold;
   display: block;
-  margin-bottom: 5px;
-  font-size: 0.9em;
+  font-size: 14px;
+  margin-top: 10px;
   color: #555;
 }
 
-form {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center; 
-  min-width: 200px;
-  margin-bottom: 20px;
-  padding: 15px;
-  background: linear-gradient(to bottom, #ffffff, #f7f9fc);
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+input, textarea {
+  width: calc(100% - 10px);
+  padding: 10px;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  transition: border-color 0.3s;
 }
 
-input[type="text"], input[type="date"], select, button {
-  width: 100%;
-  margin-bottom: 12px;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 0.9em;
-  font-family: 'Poppins', sans-serif;
-  background: #fdfdfd;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-}
-
-input:focus, select:focus {
+input:focus, textarea:focus {
   outline: none;
-  border-color: #4a90e2;
-  box-shadow: 0 0 8px rgba(74, 144, 226, 0.5);
+  border-color: #007bff;
 }
 
 button {
-  background: linear-gradient(to right, #6a11cb, #2575fc);
-  color: white;
-  border: none;
-  padding: 12px;
-  margin-top: 10px;
-  border-radius: 6px;
+  display: inline-block;
+  padding: 10px 15px;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
   cursor: pointer;
-  font-size: 0.9em;
-  font-family: 'Poppins', sans-serif;
-  font-weight: 600;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-  transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  border-radius: 5px;
+  border: none;
+  transition: background-color 0.3s, transform 0.2s;
 }
 
-button:hover {
-  background: linear-gradient(to right, #4c9cff, #2a72d4);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+#addFieldButton {
+  background-color: #28a745;
+  color: #fff;
+  margin-right: 10px;
+}
+
+#addFieldButton:hover {
+  background-color: #218838;
+}
+
+#autofillButton {
+  background-color: #007bff;
+  color: #fff;
+}
+
+#autofillButton:hover {
+  background-color: #0056b3;
 }
 
 button:active {
-  background: linear-gradient(to right, #356ac3, #214a8b);
-  transform: translateY(0);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transform: scale(0.98);
 }
 
-#save-form {
-  background: linear-gradient(to right, #28a745, #218838);
-  font-weight: bold;
-}
-
-#save-form:hover {
-  background: linear-gradient(to right, #34c153, #2b9745);
-}
-
-button#export-data, button#import-data, button#email-data {
-  width: calc(33% - 8px);
-  margin-right: 5px;
-  text-align: center;
-  padding: 10px;
-  font-size: 0.85em;
-  border-radius: 6px;
-}
-
-button#email-data {
-  margin-right: 0;
-}
-
-ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  margin-bottom: 10px;
-  background: #fafafa;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-  font-family: 'Poppins', sans-serif;
-  transition: transform 0.2s ease, box-shadow 0.3s ease;
-}
-
-li:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-li button {
-  width: auto;
-  padding: 6px 12px;
-  margin-left: 8px;
-  font-size: 0.85em;
-  background: linear-gradient(to right, #ff5f6d, #ffc371);
-  color: white;
-  border-radius: 6px;
-  transition: background 0.3s ease, box-shadow 0.3s ease;
-}
-
-li button:hover {
-  background: linear-gradient(to right, #e3425b, #ff9e4f);
-}
-
-div#app > h3 {
+#customFieldsContainer {
   margin-top: 20px;
-  font-size: 1.1em;
-  font-weight: 600;
-  color: #555;
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 6px;
+  padding: 10px;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-button, input, li {
-  animation: fadeIn 0.6s ease-in-out;
+#customFieldsContainer h4 {
+  margin-top: 0;
+  font-size: 16px;
+  color: #333;
 }
 
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-    transform: translateY(5px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.field-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
 }
 
-@media (max-width: 400px) {
-  body {
-    width: auto;
-  }
+.field-label {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 5px;
+}
 
-  button#export-data, button#import-data, button#email-data {
-    width: 100%;
-    margin-bottom: 10px;
-  }
+.field-input, .field-label-input {
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.field-input:focus, .field-label-input:focus {
+  border-color: #007bff;
+  outline: none;
 }
