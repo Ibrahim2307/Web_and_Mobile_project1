@@ -38,7 +38,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
               filledFields++;
             }
           } else {
-            if (name.indexOf(key) != -1 || placeholder.indexOf(key) != -1) {
+            console.log(key.toLowerCase());
+            if (name.indexOf(key.toLowerCase()) != -1 || placeholder.indexOf(key.toLowerCase()) != -1) {
               console.log(`Filling ${key} with ${userData[key]}`);
               input.value = userData[key] || "";
               input.dispatchEvent(new Event("input", { bubbles: true }));
