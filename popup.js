@@ -1,186 +1,257 @@
-const profileSelector = document.getElementById("profile-selector");
-const createProfileBtn = document.getElementById("create-profile");
-const deleteProfileBtn = document.getElementById("delete-profile");
-const fetchLinkedInDataBtn = document.getElementById("fetch-linkedin-data");
-const form = document.getElementById("custom-field-form");
-const fieldNameInput = document.getElementById("field-name");
-const fieldValueInput = document.getElementById("field-value");
-const fieldList = document.getElementById("field-list");
-const mappingForm = document.getElementById("field-mapping-form");
-const linkedinFieldSelect = document.getElementById("linkedin-field");
-const formFieldNameInput = document.getElementById("form-field-name");
-const mappingList = document.getElementById("mapping-list");
-const jobTrackingForm = document.getElementById("job-tracking-form");
-const companyNameInput = document.getElementById("company-name");
-const jobTitleInput = document.getElementById("job-title");
-const applicationDateInput = document.getElementById("application-date");
-const applicationStatusInput = document.getElementById("application-status");
-const jobTrackingList = document.getElementById("job-tracking-list");
-const saveFormBtn = document.getElementById("save-form");
-const savedFormsList = document.getElementById("saved-forms-list");
-const exportDataBtn = document.getElementById("export-data");
-const importDataBtn = document.getElementById("import-data");
-const emailDataBtn = document.getElementById("email-data");
-const hiddenFileInput = document.createElement("input");
-const autoFillButton = document.createElement("button");
-hiddenFileInput.type = "file";
-hiddenFileInput.accept = "application/json";
+document.addEventListener("DOMContentLoaded", () => {
+  chrome.storage.sync.get("userData", ({ userData }) => {
+    if (userData) {
+      document.getElementById("firstName").value = userData["firstName"];
+      document.getElementById("lastName").value = userData["lastName"];
+      document.getElementById("experience").value = userData["experience"];
+      document.getElementById("skills").value = userData["skills"];
+      document.getElementById("education").value = userData["education"];
+      document.getElementById("email").value = userData["email"];
+      document.getElementById("languages").value = userData["languages"];
+      document.getElementById("certificateLink").value =
+        userData["certificateLink"];
+      document.getElementById("portfolioLinks").value =
+        userData["portfolioLinks"];
+      document.getElementById("personalSummary").value =
+        userData["personalSummary"];
+    }
+  });
+});
+document.getElementById("savebtn").addEventListener("click", (e) => {
+  e.preventDefault();
 
-document.addEventListener("DOMContentLoaded", async () => {
-  const data = await chrome.storage.local.get(["profiles", "activeProfile", "fieldMappings", "jobApplications", "savedForms"]);
-  const profiles = data.profiles || {};
-  const activeProfile = data.activeProfile || "Default";
-  const fieldMappings = data.fieldMappings || {};
-  const jobApplications = data.jobApplications || [];
-  const savedForms = data.savedForms || [];
+  const userData = {
+    firstName: document.getElementById("firstName").value,
+    lastName: document.getElementById("lastName").value,
+    experience: document.getElementById("experience").value,
+    skills: document.getElementById("skills").value,
+    education: document.getElementById("education").value,
+    email: document.getElementById("email").value,
+    languages: document.getElementById("languages").value,
+    certificateLink: document.getElementById("certificateLink").value,
+    portfolioLinks: document.getElementById("portfolioLinks").value,
+    personalSummary: document.getElementById("personalSummary").value,
+  };
 
-  if (!profiles[activeProfile]) {
-    profiles[activeProfile] = {};
-    await chrome.storage.local.set({ profiles, activeProfile });
-  }
+  console.log("Predefined Fields Collected:", userData);
 
-  updateProfileSelector(profiles, activeProfile);
-  updateFieldList(profiles[activeProfile]);
-  updateMappingList(fieldMappings);
-  updateJobTrackingList(jobApplications);
-  updateSavedFormsList(savedForms);
+  const customFields = {};
+  const customFieldsContainer = document.getElementById(
+    "customFieldsContainer"
+  );
+  const customFieldGroups =
+    customFieldsContainer.querySelectorAll(".field-group");
+  console.log(customFieldGroups);
+  customFieldGroups.forEach((group) => {
+    console.log(group);
+    const fieldName = group.querySelector(".field-label-input").value;
+    const fieldValue = group.querySelector(".field-input").value;
+
+    userData[fieldName] = fieldValue;
+    console.log(fieldName);
+    console.log(fieldValue);
+  });
+
+  chrome.storage.sync.set({ userData }, () => {
+    console.log("Data Saved to Storage:", { userData });
+    alert("Details saved!");
+  });
 });
 
-createProfileBtn.addEventListener("click", async () => {
-  const profileName = prompt("Enter a name for the new profile:");
-  if (!profileName) return;
+document.getElementById("addFieldButton").addEventListener("click", () => {
+  const customFieldsContainer = document.getElementById(
+    "customFieldsContainer"
+  );
 
-  const data = await chrome.storage.local.get("profiles");
-  const profiles = data.profiles || {};
+  const fieldGroup = document.createElement("div");
+  fieldGroup.classList.add("field-group");
 
-  if (profiles[profileName]) {
-    alert("Profile already exists!");
-    return;
-  }
+  const fieldLabelInput = document.createElement("input");
+  fieldLabelInput.type = "text";
+  fieldLabelInput.placeholder = "Field Name";
+  fieldLabelInput.classList.add("field-label-input");
 
-  profiles[profileName] = {};
-  await chrome.storage.local.set({ profiles });
-  await chrome.storage.local.set({ activeProfile: profileName });
-  updateProfileSelector(profiles, profileName);
-  updateFieldList(profiles[profileName]);
+  const fieldLabel = document.createElement("label");
+  fieldLabel.textContent = "Custom Field Value";
+  fieldLabel.classList.add("field-label");
+
+  const fieldInput = document.createElement("input");
+  fieldInput.type = "text";
+  fieldInput.classList.add("field-input");
+
+  fieldGroup.appendChild(fieldLabelInput);
+  fieldGroup.appendChild(fieldInput);
+
+  customFieldsContainer.appendChild(fieldGroup);
+
+  console.log("Custom Field Group Added.");
+
+  fieldLabelInput.addEventListener("input", () => {
+    fieldLabel.textContent =
+      fieldLabelInput.value.trim() || "Custom Field Value";
+    console.log(`Field Name Updated: ${fieldLabel.textContent}`);
+  });
 });
 
-deleteProfileBtn.addEventListener("click", async () => {
-  const data = await chrome.storage.local.get(["profiles", "activeProfile"]);
-  const profiles = data.profiles || {};
-  const activeProfile = data.activeProfile;
-
-  if (Object.keys(profiles).length === 1) {
-    alert("You must have at least one profile.");
-    return;
-  }
-
-  delete profiles[activeProfile];
-  const newActiveProfile = Object.keys(profiles)[0];
-  await chrome.storage.local.set({ profiles, activeProfile: newActiveProfile });
-  updateProfileSelector(profiles, newActiveProfile);
-  updateFieldList(profiles[newActiveProfile]);
+document.getElementById("autofillButton").addEventListener("click", () => {
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    chrome.tabs.sendMessage(tabs[0].id, { action: "autofill" }, (response) => {
+      if (chrome.runtime.lastError) {
+        console.error(
+          "Error Sending Message:",
+          chrome.runtime.lastError.message
+        );
+        alert(
+          "Failed to send autofill message. Ensure the webpage is supported."
+        );
+      } else if (response?.status === "success") {
+        alert(
+          `Form autofilled successfully! Total Fields Filled: ${response.filledFields}`
+        );
+      } else {
+        console.error("Autofill Failed:", response?.message);
+        alert(`Autofill failed: ${response?.message}`);
+      }
+    });
+  });
 });
 
-profileSelector.addEventListener("change", async (e) => {
-  const selectedProfile = e.target.value;
-  const data = await chrome.storage.local.get("profiles");
-  const profiles = data.profiles || {};
-  await chrome.storage.local.set({ activeProfile: selectedProfile });
-  updateFieldList(profiles[selectedProfile]);
-});
+document
+  .getElementById("exportDataButton")
+  .addEventListener("click", async () => {
+    const data = await chrome.storage.local.get();
+    const blob = new Blob([JSON.stringify(data, null, 2)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
 
-fetchLinkedInDataBtn.addEventListener("click", async () => {
-  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-  chrome.runtime.sendMessage({ action: "extractLinkedInData", tab }, (response) => {
-    console.log(response);
-    if (response?.success) {
-      alert("LinkedIn data extracted and stored successfully!");
-    } else {
-      alert("Failed to extract LinkedIn data.");
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "autofill_data.json";
+    a.click();
+
+    URL.revokeObjectURL(url);
+    alert("Data exported successfully!");
+  });
+
+document.getElementById("importDataButton").addEventListener("click", () => {
+  const fileInput = document.getElementById("importFileInput");
+  fileInput.click();
+
+  fileInput.addEventListener("change", async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        try {
+          const importedData = JSON.parse(e.target.result);
+          await chrome.storage.local.set(importedData);
+          alert("Data imported successfully!");
+          location.reload();
+        } catch (err) {
+          console.error("Error importing data:", err);
+          alert("Failed to import data. Please check the file format.");
+        }
+      };
+      reader.readAsText(file);
     }
   });
 });
 
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
+document
+  .getElementById("sendEmailButton")
+  .addEventListener("click", async () => {
+    const data = await chrome.storage.local.get();
+    const emailBody = encodeURIComponent(JSON.stringify(data, null, 2));
 
-  const fieldName = fieldNameInput.value.trim();
-  const fieldValue = fieldValueInput.value.trim();
-  if (!fieldName || !fieldValue) return;
-
-  const data = await chrome.storage.local.get(["profiles", "activeProfile"]);
-  const profiles = data.profiles || {};
-  const activeProfile = data.activeProfile;
-
-  profiles[activeProfile][fieldName] = fieldValue;
-  await chrome.storage.local.set({ profiles });
-  fieldNameInput.value = "";
-  fieldValueInput.value = "";
-  updateFieldList(profiles[activeProfile]);
-});
-
-function updateFieldList(fields) {
-  fieldList.innerHTML = "";
-  for (const [name, value] of Object.entries(fields)) {
-    const listItem = document.createElement("li");
-    listItem.textContent = `${name}: ${value}`;
-    fieldList.appendChild(listItem);
-  }
-}
-
-mappingForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const linkedinField = linkedinFieldSelect.value;
-  const formFieldName = formFieldNameInput.value.trim();
-  if (!linkedinField || !formFieldName) return;
-
-  const data = await chrome.storage.local.get("fieldMappings");
-  const fieldMappings = data.fieldMappings || {};
-  fieldMappings[formFieldName] = linkedinField;
-  await chrome.storage.local.set({ fieldMappings });
-  formFieldNameInput.value = "";
-  updateMappingList(fieldMappings);
-});
-
-function updateMappingList(mappings) {
-  mappingList.innerHTML = "";
-  for (const [formField, linkedinField] of Object.entries(mappings)) {
-    const listItem = document.createElement("li");
-    listItem.textContent = `${linkedinField} : ${formField}`;
-    const removeButton = document.createElement("button");
-    removeButton.textContent = "Remove";
-    removeButton.className = "remove-mapping-btn";
-    removeButton.dataset.formField = formField;
-    listItem.appendChild(removeButton);
-    mappingList.appendChild(listItem);
-  }
-}
-
-jobTrackingForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const companyName = companyNameInput.value.trim();
-  const jobTitle = jobTitleInput.value.trim();
-  const applicationDate = applicationDateInput.value;
-  const applicationStatus = applicationStatusInput.value;
-
-  if (!companyName || !jobTitle || !applicationDate || !applicationStatus) return;
-
-  const data = await chrome.storage.local.get("jobApplications");
-  const jobApplications = data.jobApplications || [];
-  jobApplications.push({
-    companyName,
-    jobTitle,
-    applicationDate,
-    applicationStatus
+    const mailtoLink = `mailto:?subject=Exported Autofill Data&body=${emailBody}`;
+    window.location.href = mailtoLink;
   });
 
-  await chrome.storage.local.set({ jobApplications });
-  companyNameInput.value = "";
-  jobTitleInput.value = "";
-  applicationDateInput.value = "";
-  applicationStatusInput.value = "Applied";
-  updateJobTrackingList(jobApplications);
-});
+document
+  .getElementById("saveFormButton")
+  .addEventListener("click", async () => {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      chrome.tabs.sendMessage(
+        tabs[0].id,
+        { action: "getFormData" },
+        async (response) => {
+          if (chrome.runtime.lastError) {
+            console.error(
+              "Error saving form data:",
+              chrome.runtime.lastError.message
+            );
+            alert(
+              "Failed to save form data. Ensure the webpage supports this feature."
+            );
+          } else if (response?.formData) {
+            const savedForms =
+              (await chrome.storage.local.get("savedForms")).savedForms || [];
+            const formName = prompt(
+              "Enter a name for this saved form:",
+              `Form ${savedForms.length + 1}`
+            );
+            if (!formName) return;
+
+            savedForms.push({ name: formName, data: response.formData });
+            await chrome.storage.local.set({ savedForms });
+
+            alert(`Form "${formName}" saved successfully!`);
+            updateSavedFormsList();
+          }
+        }
+      );
+    });
+  });
+
+async function updateSavedFormsList() {
+  const savedFormsList = document.getElementById("savedFormsList");
+  savedFormsList.innerHTML = "";
+
+  const savedForms =
+    (await chrome.storage.local.get("savedForms")).savedForms || [];
+  savedForms.forEach((form, index) => {
+    const li = document.createElement("li");
+    li.textContent = form.name;
+
+    const restoreButton = document.createElement("button");
+    restoreButton.textContent = "Restore";
+    restoreButton.style.marginLeft = "10px";
+    restoreButton.addEventListener("click", () => restoreForm(form.data));
+
+    const deleteButton = document.createElement("button");
+    deleteButton.textContent = "Delete";
+    deleteButton.style.marginLeft = "10px";
+    deleteButton.addEventListener("click", async () => {
+      savedForms.splice(index, 1);
+      await chrome.storage.local.set({ savedForms });
+      updateSavedFormsList();
+    });
+
+    li.appendChild(restoreButton);
+    li.appendChild(deleteButton);
+    savedFormsList.appendChild(li);
+  });
+}
+
+function restoreForm(formData) {
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    chrome.tabs.sendMessage(
+      tabs[0].id,
+      { action: "restoreFormData", formData },
+      (response) => {
+        if (chrome.runtime.lastError) {
+          console.error(
+            "Error restoring form data:",
+            chrome.runtime.lastError.message
+          );
+          alert(
+            "Failed to restore form data. Ensure the webpage supports this feature."
+          );
+        } else {
+          alert("Form data restored successfully!");
+        }
+      }
+    );
+  });
+}
