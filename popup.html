@@ -5,7 +5,19 @@
   <title>Autofill Settings</title>
 </head>
 <body>
+  <div id="profileSection">
+    <h4>Profile Management</h4>
+    <select id="profileSelector"></select>
+    <button id="createProfileButton">Create Profile</button>
+    <!--<button id="loadProfileButton">Load Profile and Autofill</button>-->
+  </div>
   <h3>Save Your Details</h3>
+  <div id="getprofileSection">
+    <h4>Linkedin Profile</h4>
+    <label>Profile Name</label><input id="getProfileInfo" type="text">
+    <button id="getInfoProfileButton">Get Info</button>
+    
+  </div>
   <form id="userForm">
     <label>First Name</label><input id="firstName" type="text">
     <label>Last Name</label><input id="lastName" type="text">
@@ -32,12 +44,7 @@
     <input id="importFileInput" type="file" style="display: none;">
     <button id="sendEmailButton">Send Data via Email</button>
   </div> 
-  <div id="profileSection">
-    <h4>Profile Management</h4>
-    <select id="profileSelector"></select>
-    <button id="createProfileButton">Create Profile</button>
-    <button id="loadProfileButton">Load Profile and Autofill</button>
-  </div>
+  
 </body>
 <script src="./popup.js"></script>
 </html>
