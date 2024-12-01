@@ -1,178 +1,200 @@
 body {
   font-family: 'Arial', sans-serif;
-  padding: 15px;
-  background-color: #f9f9f9;
-  color: #333;
+  padding: 20px;
+  background-color: #f4f4f9;
+  color: #2c3e50;
+  line-height: 1.6;
+  margin: 0;
 }
 
 h3 {
-  font-size: 20px;
+  font-size: 26px;
   color: #007bff;
   margin-bottom: 15px;
+  border-bottom: 3px solid #007bff;
+  padding-bottom: 5px;
+}
+
+h4 {
+  font-size: 20px;
+  color: #007bff;
+  margin-bottom: 10px;
 }
 
 label {
   display: block;
-  font-size: 14px;
-  margin-top: 10px;
-  color: #555;
+  font-size: 16px;
+  margin-top: 15px;
+  color: #34495e;
 }
 
 input,
-textarea {
-  width: calc(100% - 10px);
-  padding: 10px;
-  margin-top: 5px;
-  margin-bottom: 15px;
+textarea,
+select {
+  width: 100%;
+  padding: 12px 15px;
+  margin-top: 8px;
+  margin-bottom: 20px;
   font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  border: 1px solid #ced6e0;
+  border-radius: 8px;
+  background-color: #ffffff;
+  transition: all 0.3s ease-in-out;
   box-sizing: border-box;
-  transition: border-color 0.3s;
 }
 
 input:focus,
-textarea:focus {
-  outline: none;
+textarea:focus,
+select:focus {
   border-color: #007bff;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.4);
+  outline: none;
+}
+
+textarea {
+  resize: none;
 }
 
 button {
   display: inline-block;
-  padding: 10px 15px;
-  font-size: 14px;
+  padding: 12px 20px;
+  font-size: 15px;
   font-weight: bold;
-  text-align: center;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 8px;
   border: none;
-  transition: background-color 0.3s, transform 0.2s;
+  text-align: center;
+  transition: all 0.3s ease;
 }
 
-#addFieldButton {
+button:active {
+  transform: scale(0.96);
+}
+
+#saveFormButton,
+#addFieldButton,
+#autofillButton,
+#createProfileButton,
+#GenerateCoverLetter {
+  background-color: #007bff;
+  color: #fff;
+  margin-right: 10px;
+}
+
+#saveFormButton:hover,
+#addFieldButton:hover,
+#autofillButton:hover,
+#createProfileButton:hover,
+#GenerateCoverLetter:hover {
+  background-color: #0056b3;
+}
+
+#exportDataButton,
+#importDataButton,
+#sendEmailButton {
   background-color: #28a745;
   color: #fff;
   margin-right: 10px;
 }
 
-#addFieldButton:hover {
+#exportDataButton:hover,
+#importDataButton:hover,
+#sendEmailButton:hover {
   background-color: #218838;
-}
-
-#autofillButton {
-  background-color: #007bff;
-  color: #fff;
-}
-
-#autofillButton:hover {
-  background-color: #0056b3;
-}
-
-button:active {
-  transform: scale(0.98);
-}
-
-#savebtn {
-  background-color: #007bff;
-  color: #fff;
-  margin-right: 10px;
-
 }
 
 #customFieldsContainer {
   margin-top: 20px;
-  padding: 10px;
+  padding: 20px;
   background-color: #ffffff;
   border: 1px solid #ddd;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 #customFieldsContainer h4 {
   margin-top: 0;
-  font-size: 16px;
-  color: #333;
+  font-size: 18px;
+  color: #2c3e50;
 }
 
 .field-group {
-  display: flex;
-  flex-direction: column;
   margin-bottom: 15px;
 }
 
 .field-label {
-  font-size: 14px;
-  color: #333;
+  font-size: 15px;
   margin-bottom: 5px;
+  color: #34495e;
 }
 
-.field-input,
-.field-label-input {
-  padding: 8px;
+#profileSection {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+#profileSelector {
+  width: 100%;
+  padding: 12px 15px;
+  margin-top: 10px;
+  border: 1px solid #ced6e0;
+  border-radius: 8px;
   font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-sizing: border-box;
+  background-color: #ffffff;
+  transition: all 0.3s ease-in-out;
 }
 
-.field-input:focus,
-.field-label-input:focus {
+#profileSelector:focus {
   border-color: #007bff;
-  outline: none;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.4);
 }
 
 #dataTransferSection {
   margin-top: 20px;
-  padding: 15px;
+  padding: 20px;
   background-color: #f8f9fa;
   border: 1px solid #ddd;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 #dataTransferSection h4 {
   margin-top: 0;
-  font-size: 16px;
-  color: #333;
+  font-size: 18px;
+  color: #2c3e50;
 }
 
 #dataTransferSection button {
   display: inline-block;
   margin-right: 10px;
   margin-top: 10px;
-  padding: 10px 15px;
+  padding: 12px 20px;
   font-size: 14px;
   font-weight: bold;
   text-align: center;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 8px;
   border: none;
   background-color: #007bff;
   color: #fff;
-  transition: background-color 0.3s, transform 0.2s;
+  transition: all 0.3s ease-in-out;
 }
 
 #dataTransferSection button:hover {
   background-color: #0056b3;
 }
 
-#dataTransferSection button:active {
-  transform: scale(0.98);
-}
-
 #formHistorySection {
   margin-top: 20px;
-  padding: 15px;
+  padding: 20px;
   background-color: #f8f9fa;
   border: 1px solid #ddd;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-#formHistorySection h4 {
-  margin-top: 0;
-  font-size: 16px;
-  color: #333;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 #formHistorySection ul {
@@ -181,69 +203,40 @@ button:active {
 }
 
 #formHistorySection li {
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
 #formHistorySection button {
-  padding: 5px 10px;
-  font-size: 12px;
+  padding: 8px 12px;
+  font-size: 14px;
   cursor: pointer;
-  border: 1px solid #ddd;
   border-radius: 5px;
   background-color: #007bff;
   color: white;
+  border: none;
+  transition: all 0.3s ease;
 }
 
 #formHistorySection button:hover {
   background-color: #0056b3;
 }
 
+@media (max-width: 768px) {
+  body {
+    padding: 15px;
+  }
 
-#profileSection {
-  margin-top: 20px;
-  padding: 15px;
-  background-color: #f8f9fa;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
+  button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
 
-#profileSection h4 {
-  margin-top: 0;
-  font-size: 16px;
-  color: #333;
-}
-
-#profileSelector {
-  width: 100%;
-  padding: 10px;
-  margin-top: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 14px;
-}
-
-#createProfileButton {
-  margin-top: 10px;
-  padding: 10px 15px;
-  font-size: 14px;
-  font-weight: bold;
-  text-align: center;
-  cursor: pointer;
-  border-radius: 5px;
-  border: none;
-  background-color: #007bff;
-  color: white;
-  transition: background-color 0.3s, transform 0.2s;
-}
-
-#createProfileButton:hover {
-  background-color: #0056b3;
-}
-
-#createProfileButton:active {
-  transform: scale(0.98);
+  input,
+  textarea,
+  select {
+    width: 100%;
+  }
 }
