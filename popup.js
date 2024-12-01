@@ -255,3 +255,191 @@ function restoreForm(formData) {
     );
   });
 }
+
+document.addEventListener("DOMContentLoaded", updateSavedFormsList);
+
+document.addEventListener("DOMContentLoaded", () => {
+  const profiles = JSON.parse(localStorage.getItem("profiles")) || {
+    Default: {},
+  };
+  const activeProfile = localStorage.getItem("activeProfile") || "Default";
+
+  if (!profiles[activeProfile]) {
+    profiles[activeProfile] = {};
+    localStorage.setItem("profiles", JSON.stringify(profiles));
+  }
+
+  populateProfileSelector(profiles, activeProfile);
+  loadProfileData(profiles[activeProfile]);
+});
+
+function populateProfileSelector(profiles, activeProfile) {
+  const profileSelector = document.getElementById("profileSelector");
+  profileSelector.innerHTML = "";
+
+  Object.keys(profiles).forEach((profileName) => {
+    const option = document.createElement("option");
+    option.value = profileName;
+    option.textContent = profileName;
+    if (profileName === activeProfile) {
+      option.selected = true;
+    }
+    profileSelector.appendChild(option);
+  });
+
+  profileSelector.addEventListener("change", (event) => {
+    const selectedProfile = event.target.value;
+    localStorage.setItem("activeProfile", selectedProfile);
+    loadProfileData(profiles[selectedProfile]);
+  });
+}
+
+document.getElementById("createProfileButton").addEventListener("click", () => {
+  const profileName = prompt("Enter a name for the new profile:");
+  if (!profileName) return;
+
+  const profiles = JSON.parse(localStorage.getItem("profiles")) || {};
+
+  if (profiles[profileName]) {
+    alert("A profile with this name already exists.");
+    return;
+  }
+
+  profiles[profileName] = {};
+  localStorage.setItem("profiles", JSON.stringify(profiles));
+  localStorage.setItem("activeProfile", profileName);
+
+  populateProfileSelector(profiles, profileName);
+  loadProfileData(profiles[profileName]);
+});
+
+function loadProfileData(profileData = {}) {
+  document.getElementById("firstName").value = profileData.firstName || "";
+  document.getElementById("lastName").value = profileData.lastName || "";
+  document.getElementById("email").value = profileData.email || "";
+  document.getElementById("phone").value = profileData.phone || "";
+  document.getElementById("position").value = profileData.position || "";
+  document.getElementById("startDate").value = profileData.startDate || "";
+  document.getElementById("experience").value = profileData.experience || "";
+  document.getElementById("skills").value = profileData.skills || "";
+  document.getElementById("education").value = profileData.education || "";
+  document.getElementById("languages").value = profileData.languages || "";
+  document.getElementById("certificateLink").value =
+    profileData.certificateLink || "";
+  document.getElementById("portfolioLinks").value =
+    profileData.portfolioLinks || "";
+  document.getElementById("personalSummary").value =
+    profileData.personalSummary || "";
+}
+
+document.getElementById("userForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const profiles = JSON.parse(localStorage.getItem("profiles")) || {};
+  const activeProfile = localStorage.getItem("activeProfile") || "Default";
+
+  const profileData = {
+    firstName: document.getElementById("firstName").value,
+    lastName: document.getElementById("lastName").value,
+    email: document.getElementById("email").value,
+    phone: document.getElementById("phone").value,
+    position: document.getElementById("position").value,
+    startDate: document.getElementById("startDate").value,
+    experience: document.getElementById("experience").value,
+    skills: document.getElementById("skills").value,
+    education: document.getElementById("education").value,
+    languages: document.getElementById("languages").value,
+    certificateLink: document.getElementById("certificateLink").value,
+    portfolioLinks: document.getElementById("portfolioLinks").value,
+    personalSummary: document.getElementById("personalSummary").value,
+  };
+
+  profiles[activeProfile] = profileData;
+  localStorage.setItem("profiles", JSON.stringify(profiles));
+
+  alert(`Data saved to profile "${activeProfile}"!`);
+});
+
+document.getElementById("loadProfileButton").addEventListener("click", () => {
+  const profiles = JSON.parse(localStorage.getItem("profiles")) || {};
+  const activeProfile = localStorage.getItem("activeProfile");
+
+  if (!profiles[activeProfile]) {
+    alert(`No data found for the active profile: ${activeProfile}`);
+    return;
+  }
+
+  const profileData = profiles[activeProfile];
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    chrome.tabs.sendMessage(
+      tabs[0].id,
+      { action: "autofillProfile", profileData },
+      (response) => {
+        if (chrome.runtime.lastError) {
+          console.error(
+            "Error Sending Message:",
+            chrome.runtime.lastError.message
+          );
+          alert(
+            "Failed to send profile data for autofill. Ensure the webpage supports this feature."
+          );
+        } else if (response?.status === "success") {
+          alert(
+            `Profile "${activeProfile}" data loaded and autofilled successfully!`
+          );
+        } else {
+          console.error("Autofill failed:", response?.message);
+          alert(`Autofill failed: ${response?.message}`);
+        }
+      }
+    );
+  });
+});
+
+document.getElementById("GenerateCoverLetter").addEventListener("click", () => {
+  alert("Yazir");
+  const data = JSON.stringify({
+    model: "gemma-2-27b",
+    messages: [
+      {
+        role: "user",
+        content:
+          "Generate me a cover letter using this information: " +
+          document.getElementById("firstName").value +
+          "!" +
+          document.getElementById("experience").value +
+          "!" +
+          document.getElementById("skills").value +
+          "!" +
+          document.getElementById("languages").value +
+          "!" +
+          document.getElementById("education").value +
+          "!",
+      },
+    ],
+  });
+
+  const xhr = new XMLHttpRequest();
+  xhr.withCredentials = true;
+
+  xhr.addEventListener("readystatechange", function () {
+    if (this.readyState === this.DONE) {
+      var jsonparse = JSON.parse(this.responseText);
+
+      document.getElementById("personalSummary").value =
+        jsonparse["choices"][0]["message"]["content"];
+
+      alert("Yazdi");
+    }
+  });
+
+  xhr.open("POST", "https://google-gemma-2.p.rapidapi.com/");
+  xhr.setRequestHeader(
+    "x-rapidapi-key",
+    "09a7323ed4msh82ff902e953be64p1728d2jsn1809a8db9423"
+  );
+  xhr.setRequestHeader("x-rapidapi-host", "google-gemma-2.p.rapidapi.com");
+  xhr.setRequestHeader("Content-Type", "application/json");
+
+  xhr.send(data);
+});
