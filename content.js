@@ -1,9 +1,12 @@
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.action === "autofill") {
     console.log("Autofill message received.");
-
+   
     chrome.storage.sync.get("userData", ({ userData }) => {
-      if (!userData) {
+      var activeProfile = chrome.storage.sync.get("customProfile", ({ customProfile }) => {
+
+      var userDataAll = userData[customProfile['activeprofile']];
+      if (!userDataAll) {
         console.error("No user data found.");
         sendResponse({ status: "error", message: "No user data found." });
         return;
@@ -28,20 +31,20 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         const placeholder = input.placeholder?.toLowerCase();
         console.log(userData);
 
-        for (const [key, value] of Object.entries(userData)) {
-          if (typeof fieldMappings[key] !== "undefined") {
-            var keywords = fieldMappings[key];
+        for (const [key, value] of Object.entries(userDataAll)) {
+          if (typeof fieldMappings[key.toLowerCase()] !== "undefined") {
+            var keywords = fieldMappings[key.toLowerCase()];
             if (keywords.some((keyword) => name?.includes(keyword) || placeholder?.includes(keyword))) {
-              console.log(`Filling ${key} with ${userData[key]}`);
-              input.value = userData[key] || "";
+              console.log(`Filling ${key} with ${userDataAll[key]}`);
+              input.value = userDataAll[key] || "";
               input.dispatchEvent(new Event("input", { bubbles: true }));
               filledFields++;
             }
           } else {
             console.log(key.toLowerCase());
             if (name.indexOf(key.toLowerCase()) != -1 || placeholder.indexOf(key.toLowerCase()) != -1) {
-              console.log(`Filling ${key} with ${userData[key]}`);
-              input.value = userData[key] || "";
+              console.log(`Filling ${key} with ${userDataAll[key]}`);
+              input.value = userDataAll[key] || "";
               input.dispatchEvent(new Event("input", { bubbles: true }));
               filledFields++;
             }
@@ -57,6 +60,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         sendResponse({ status: "error", message: "No fields matched." });
       }
     });
+  });
 
     return true;
   }
