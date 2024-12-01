@@ -1,5 +1,3 @@
-
-
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.action === "autofill") {
     console.log("Autofill message received.");
@@ -19,7 +17,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         email: ["email", "email address", "e-mail"],
         phone: ["phone", "phone number", "contact"],
         position: ["applied position", "job title", "position"],
-        startDate: ["start date", "earliest start date", "available date"]
+        startDate: ["start date", "earliest start date", "available date"],
       };
 
       const inputs = document.querySelectorAll("input, textarea");
@@ -29,35 +27,31 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         const name = input.name?.toLowerCase() || input.id?.toLowerCase();
         const placeholder = input.placeholder?.toLowerCase();
         console.log(userData);
-        
+
         for (const [key, value] of Object.entries(userData)) {
-          
-          if(typeof(fieldMappings[key]) !== 'undefined'){
+          if (typeof fieldMappings[key] !== "undefined") {
             var keywords = fieldMappings[key];
 
             if (
-              keywords.some((keyword) =>
-                name?.includes(keyword) || placeholder?.includes(keyword)
+              keywords.some(
+                (keyword) =>
+                  name?.includes(keyword) || placeholder?.includes(keyword)
               )
             ) {
               console.log(`Filling ${key} with ${userData[key]}`);
               input.value = userData[key] || "";
-              input.dispatchEvent(new Event("input", { bubbles: true })); 
+              input.dispatchEvent(new Event("input", { bubbles: true }));
               filledFields++;
-              //break;
             }
-            
-          }else{
-
-            if(name.indexOf(key)!= -1 || placeholder.indexOf(key)!= -1){
+          } else {
+            if (name.indexOf(key) != -1 || placeholder.indexOf(key) != -1) {
               console.log(`Filling ${key} with ${userData[key]}`);
               input.value = userData[key] || "";
-              input.dispatchEvent(new Event("input", { bubbles: true })); 
+              input.dispatchEvent(new Event("input", { bubbles: true }));
               filledFields++;
             }
-
           }
-          }
+        }
       });
 
       if (filledFields > 0) {
@@ -72,7 +66,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return true;
   }
 });
-
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.action === "getFormData") {
@@ -98,7 +91,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       const name = input.name || input.id || input.placeholder;
       if (formData[name] !== undefined) {
         input.value = formData[name];
-        input.dispatchEvent(new Event("input", { bubbles: true })); 
+        input.dispatchEvent(new Event("input", { bubbles: true }));
       }
     });
 
@@ -144,23 +137,21 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
       for (const [key, keywords] of Object.entries(fieldMappings)) {
         if (
-          keywords.some((keyword) =>
-            name?.includes(keyword) || placeholder?.includes(keyword)
+          keywords.some(
+            (keyword) =>
+              name?.includes(keyword) || placeholder?.includes(keyword)
           )
         ) {
           console.log(`Filling ${key} with ${profileData[key]}`);
           input.value = profileData[key] || "";
-          input.dispatchEvent(new Event("input", { bubbles: true })); 
+          input.dispatchEvent(new Event("input", { bubbles: true }));
           filledFields++;
           break;
         }
       }
 
-      console.log(key+'++++');
+      console.log(key + "++++");
     });
-
-
-    
 
     if (filledFields > 0) {
       console.log(`Successfully filled ${filledFields} fields.`);
@@ -172,4 +163,3 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return true;
   }
 });
-
