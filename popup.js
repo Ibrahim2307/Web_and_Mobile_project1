@@ -14,10 +14,49 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
+document.getElementById("getInfoProfileButton").addEventListener("click", (e) => {
+
+if(document.getElementById("getProfileInfo").value!=''){
+  const data = null;
+
+const xhr = new XMLHttpRequest();
+xhr.withCredentials = true;
+
+xhr.addEventListener('readystatechange', function () {
+	if (this.readyState === this.DONE) {
+    const getData = JSON.parse(this.responseText);
+
+		if(typeof(getData['firstName'])!=='undefined')
+    {
+      document.getElementById("firstName").value = getData["firstName"];
+      document.getElementById("lastName").value = getData["lastName"];
+      if(typeof(getData['position'][0])!=='undefined'){
+        document.getElementById("experience").value = getData['position'][0]["title"];
+      }
+      if(typeof(getData['skills'][0])!=='undefined'){
+        document.getElementById("skills").value = getData['skills'][0]["name"];
+      }
+      if(typeof(getData['educations'][0])!=='undefined'){
+        document.getElementById("education").value = getData['educations'][0]["schoolName"];
+      }
+      document.getElementById("personalSummary").value = getData["summary"];
+    }
+	}
+});
+
+xhr.open('GET', 'https://linkedin-data-api.p.rapidapi.com/?username='+document.getElementById("getProfileInfo").value);
+xhr.setRequestHeader('x-rapidapi-key', '09a7323ed4msh82ff902e953be64p1728d2jsn1809a8db9423');
+xhr.setRequestHeader('x-rapidapi-host', 'linkedin-data-api.p.rapidapi.com');
+
+xhr.send(data);
+}
+});
+
 document.getElementById("saveFormButton").addEventListener("click", (e) => {
   e.preventDefault();
-
-  const userData = {
+  chrome.storage.sync.get("userData", ({ userData }) => {
+userData[localStorage.getItem("activeProfile")] = {
     firstName: document.getElementById("firstName").value,
     lastName: document.getElementById("lastName").value,
     experience: document.getElementById("experience").value,
@@ -28,8 +67,10 @@ document.getElementById("saveFormButton").addEventListener("click", (e) => {
     certificateLink: document.getElementById("certificateLinks").value,
     portfolioLinks: document.getElementById("portfolioLinks").value,
     personalSummary: document.getElementById("personalSummary").value,
-  };
+};
 
+
+  
   console.log("Predefined Fields Collected:", userData);
 
   const customFields = {};
@@ -40,15 +81,16 @@ document.getElementById("saveFormButton").addEventListener("click", (e) => {
   console.log(group);
   const fieldName = group.querySelector(".field-label-input").value;
   const fieldValue = group.querySelector(".field-input").value;
-  userData[fieldName] = fieldValue;
+  userData[localStorage.getItem("activeProfile")][fieldName] = fieldValue;
   console.log(fieldName);
   console.log(fieldValue);
   });
-
+console.log(userData);
   chrome.storage.sync.set({ userData }, () => {
     console.log("Data Saved to Storage:", { userData });
     alert("Details saved!");
   });
+});
 });
 
 document.getElementById("addFieldButton").addEventListener("click", () => {
@@ -145,60 +187,6 @@ document.getElementById("sendEmailButton").addEventListener("click", async () =>
     window.location.href = mailtoLink;
   });
 
-  // document.getElementById("saveFormButton").addEventListener("click", async () => {
-  //   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-  //     chrome.tabs.sendMessage(
-  //       tabs[0].id,
-  //       { action: "getFormData" },
-  //       async (response) => {
-  //         if (chrome.runtime.lastError) {
-  //           console.error("Error saving form data:", chrome.runtime.lastError.message);
-  //           alert("Failed to save form data. Ensure the webpage supports this feature.");
-  //         } 
-  //         else if (response?.formData) {
-  //           // const savedForms = (await chrome.storage.local.get("savedForms")).savedForms || [];
-  //           // const formName = prompt("Enter a name for this saved form:", `Form ${savedForms.length + 1}`);
-  //           // if (!formName) return;
-  
-  //           // savedForms.push({ name: formName, data: response.formData });
-  //           // await chrome.storage.local.set({ savedForms });
-  
-  //           alert(`Form "${formName}" saved successfully!`);
-  //           updateSavedFormsList();
-  //         }
-  //       }
-  //     );
-  //   });
-  // });
-// async function updateSavedFormsList() {
-//   const savedFormsList = document.getElementById("saveFormButton");
-//   savedFormsList.innerHTML = " ";
-
-//   const savedForms = (await chrome.storage.local.get("savedForms")).savedForms || [];
-//   savedForms.forEach((form, index) => {
-//     const li = document.createElement("li");
-//     li.textContent = form.name;
-
-//     const restoreButton = document.createElement("button");
-//     restoreButton.textContent = "Restore";
-//     restoreButton.style.marginLeft = "10px";
-//     restoreButton.addEventListener("click", () => restoreForm(form.data));
-
-//     const deleteButton = document.createElement("button");
-//     deleteButton.textContent = "Delete";
-//     deleteButton.style.marginLeft = "10px";
-//     deleteButton.addEventListener("click", async () => {
-//       savedForms.splice(index, 1);
-//       await chrome.storage.local.set({ savedForms });
-//       updateSavedFormsList();
-//     });
-
-//     li.appendChild(restoreButton);
-//     li.appendChild(deleteButton);
-//     savedFormsList.appendChild(li);
-//   });
-// }
-
 document.getElementById("GenerateCoverLetter").addEventListener("click", () => {
   console.log("Started generating")
   alert("Generatig...");
@@ -230,8 +218,6 @@ document.getElementById("GenerateCoverLetter").addEventListener("click", () => {
   xhr.send(data);
 });
 
-// document.addEventListener("DOMContentLoaded", updateSavedFormsList);
-
 document.addEventListener("DOMContentLoaded", () => {
   const profiles = JSON.parse(localStorage.getItem("profiles")) || {
     Default: {},
@@ -241,13 +227,14 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!profiles[activeProfile]) {
     profiles[activeProfile] = {};
     localStorage.setItem("profiles", JSON.stringify(profiles));
+    localStorage.setItem("activeProfile", activeProfile);
   }
 
-  populateProfileSelector(profiles, activeProfile);
-  loadProfileData(profiles[activeProfile]);
+  populateProfileSelector(profiles, activeProfile, true);
+  loadProfileData(activeProfile);
 });
 
-function populateProfileSelector(profiles, activeProfile) {
+function populateProfileSelector(profiles, activeProfile, gstatus) {
   const profileSelector = document.getElementById("profileSelector");
   profileSelector.innerHTML = "";
 
@@ -264,8 +251,26 @@ function populateProfileSelector(profiles, activeProfile) {
   profileSelector.addEventListener("change", (event) => {
     const selectedProfile = event.target.value;
     localStorage.setItem("activeProfile", selectedProfile);
-    loadProfileData(profiles[selectedProfile]);
+    loadProfileData(selectedProfile);
+    const customProfile = {};
+    customProfile['activeprofile'] = selectedProfile;
+    chrome.storage.sync.set({ customProfile }, () => {
+      console.log("Data Saved to Storage:", { customProfile });
+
+    });
   });
+  if(gstatus==true){
+    const selectedProfile = document.getElementById("profileSelector").value;
+    localStorage.setItem("activeProfile", selectedProfile);
+    loadProfileData(selectedProfile);
+    const customProfile = {};
+    customProfile['activeprofile'] = selectedProfile;
+    chrome.storage.sync.set({ customProfile }, () => {
+      console.log("Data Saved to Storage:", { customProfile });
+
+    });
+    
+  }
 }
 
 document.getElementById("createProfileButton").addEventListener("click", () => {
@@ -283,11 +288,14 @@ document.getElementById("createProfileButton").addEventListener("click", () => {
   localStorage.setItem("profiles", JSON.stringify(profiles));
   localStorage.setItem("activeProfile", profileName);
 
-  populateProfileSelector(profiles, profileName);
-  loadProfileData(profiles[profileName]);
+  populateProfileSelector(profiles, profileName, false);
+  loadProfileData(profileName);
 });
 
-function loadProfileData(profileData = {}) {
+function loadProfileData(profile) {
+  chrome.storage.sync.get("userData", ({ userData }) => {
+if(typeof(userData[profile])!=='undefined'){
+  var profileData = userData[profile];
   document.getElementById("firstName").value = profileData.firstName || "";
   document.getElementById("lastName").value = profileData.lastName || "";
   document.getElementById("email").value = profileData.email || "";
@@ -298,6 +306,8 @@ function loadProfileData(profileData = {}) {
   document.getElementById("certificateLinks").value = profileData.certificateLink || "";
   document.getElementById("portfolioLinks").value = profileData.portfolioLinks || "";
   document.getElementById("personalSummary").value = profileData.personalSummary || "";
+}
+  });
 }
 
 document.getElementById("userForm").addEventListener("submit", (e) => {
