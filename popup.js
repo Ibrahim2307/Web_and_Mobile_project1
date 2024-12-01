@@ -8,16 +8,13 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("education").value = userData["education"];
       document.getElementById("email").value = userData["email"];
       document.getElementById("languages").value = userData["languages"];
-      document.getElementById("certificateLink").value =
-        userData["certificateLink"];
-      document.getElementById("portfolioLinks").value =
-        userData["portfolioLinks"];
-      document.getElementById("personalSummary").value =
-        userData["personalSummary"];
+      document.getElementById("certificateLinks").value = userData["certificateLink"];
+      document.getElementById("portfolioLinks").value = userData["portfolioLinks"];
+      document.getElementById("personalSummary").value = userData["personalSummary"];
     }
   });
 });
-document.getElementById("savebtn").addEventListener("click", (e) => {
+document.getElementById("saveFormButton").addEventListener("click", (e) => {
   e.preventDefault();
 
   const userData = {
@@ -28,7 +25,7 @@ document.getElementById("savebtn").addEventListener("click", (e) => {
     education: document.getElementById("education").value,
     email: document.getElementById("email").value,
     languages: document.getElementById("languages").value,
-    certificateLink: document.getElementById("certificateLink").value,
+    certificateLink: document.getElementById("certificateLinks").value,
     portfolioLinks: document.getElementById("portfolioLinks").value,
     personalSummary: document.getElementById("personalSummary").value,
   };
@@ -36,20 +33,16 @@ document.getElementById("savebtn").addEventListener("click", (e) => {
   console.log("Predefined Fields Collected:", userData);
 
   const customFields = {};
-  const customFieldsContainer = document.getElementById(
-    "customFieldsContainer"
-  );
-  const customFieldGroups =
-    customFieldsContainer.querySelectorAll(".field-group");
+  const customFieldsContainer = document.getElementById("customFieldsContainer");
+  const customFieldGroups = customFieldsContainer.querySelectorAll(".field-group");
   console.log(customFieldGroups);
   customFieldGroups.forEach((group) => {
-    console.log(group);
-    const fieldName = group.querySelector(".field-label-input").value;
-    const fieldValue = group.querySelector(".field-input").value;
-
-    userData[fieldName] = fieldValue;
-    console.log(fieldName);
-    console.log(fieldValue);
+  console.log(group);
+  const fieldName = group.querySelector(".field-label-input").value;
+  const fieldValue = group.querySelector(".field-input").value;
+  userData[fieldName] = fieldValue;
+  console.log(fieldName);
+  console.log(fieldValue);
   });
 
   chrome.storage.sync.set({ userData }, () => {
@@ -59,9 +52,7 @@ document.getElementById("savebtn").addEventListener("click", (e) => {
 });
 
 document.getElementById("addFieldButton").addEventListener("click", () => {
-  const customFieldsContainer = document.getElementById(
-    "customFieldsContainer"
-  );
+  const customFieldsContainer = document.getElementById("customFieldsContainer");
 
   const fieldGroup = document.createElement("div");
   fieldGroup.classList.add("field-group");
@@ -87,8 +78,7 @@ document.getElementById("addFieldButton").addEventListener("click", () => {
   console.log("Custom Field Group Added.");
 
   fieldLabelInput.addEventListener("input", () => {
-    fieldLabel.textContent =
-      fieldLabelInput.value.trim() || "Custom Field Value";
+    fieldLabel.textContent = fieldLabelInput.value.trim() || "Custom Field Value";
     console.log(`Field Name Updated: ${fieldLabel.textContent}`);
   });
 });
@@ -97,17 +87,10 @@ document.getElementById("autofillButton").addEventListener("click", () => {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     chrome.tabs.sendMessage(tabs[0].id, { action: "autofill" }, (response) => {
       if (chrome.runtime.lastError) {
-        console.error(
-          "Error Sending Message:",
-          chrome.runtime.lastError.message
-        );
-        alert(
-          "Failed to send autofill message. Ensure the webpage is supported."
-        );
+        console.error("Error Sending Message:",chrome.runtime.lastError.message);
+        alert("Failed to send autofill message. Ensure the webpage is supported.");
       } else if (response?.status === "success") {
-        alert(
-          `Form autofilled successfully! Total Fields Filled: ${response.filledFields}`
-        );
+        alert(`Form autofilled successfully! Total Fields Filled: ${response.filledFields}`);
       } else {
         console.error("Autofill Failed:", response?.message);
         alert(`Autofill failed: ${response?.message}`);
@@ -116,13 +99,9 @@ document.getElementById("autofillButton").addEventListener("click", () => {
   });
 });
 
-document
-  .getElementById("exportDataButton")
-  .addEventListener("click", async () => {
+document.getElementById("exportDataButton").addEventListener("click", async () => {
     const data = await chrome.storage.local.get();
-    const blob = new Blob([JSON.stringify(data, null, 2)], {
-      type: "application/json",
-    });
+    const blob = new Blob([JSON.stringify(data, null, 2)], {type: "application/json",});
     const url = URL.createObjectURL(blob);
 
     const a = document.createElement("a");
@@ -158,9 +137,7 @@ document.getElementById("importDataButton").addEventListener("click", () => {
   });
 });
 
-document
-  .getElementById("sendEmailButton")
-  .addEventListener("click", async () => {
+document.getElementById("sendEmailButton").addEventListener("click", async () => {
     const data = await chrome.storage.local.get();
     const emailBody = encodeURIComponent(JSON.stringify(data, null, 2));
 
@@ -168,95 +145,92 @@ document
     window.location.href = mailtoLink;
   });
 
-document
-  .getElementById("saveFormButton")
-  .addEventListener("click", async () => {
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      chrome.tabs.sendMessage(
-        tabs[0].id,
-        { action: "getFormData" },
-        async (response) => {
-          if (chrome.runtime.lastError) {
-            console.error(
-              "Error saving form data:",
-              chrome.runtime.lastError.message
-            );
-            alert(
-              "Failed to save form data. Ensure the webpage supports this feature."
-            );
-          } else if (response?.formData) {
-            const savedForms =
-              (await chrome.storage.local.get("savedForms")).savedForms || [];
-            const formName = prompt(
-              "Enter a name for this saved form:",
-              `Form ${savedForms.length + 1}`
-            );
-            if (!formName) return;
+  // document.getElementById("saveFormButton").addEventListener("click", async () => {
+  //   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+  //     chrome.tabs.sendMessage(
+  //       tabs[0].id,
+  //       { action: "getFormData" },
+  //       async (response) => {
+  //         if (chrome.runtime.lastError) {
+  //           console.error("Error saving form data:", chrome.runtime.lastError.message);
+  //           alert("Failed to save form data. Ensure the webpage supports this feature.");
+  //         } 
+  //         else if (response?.formData) {
+  //           // const savedForms = (await chrome.storage.local.get("savedForms")).savedForms || [];
+  //           // const formName = prompt("Enter a name for this saved form:", `Form ${savedForms.length + 1}`);
+  //           // if (!formName) return;
+  
+  //           // savedForms.push({ name: formName, data: response.formData });
+  //           // await chrome.storage.local.set({ savedForms });
+  
+  //           alert(`Form "${formName}" saved successfully!`);
+  //           updateSavedFormsList();
+  //         }
+  //       }
+  //     );
+  //   });
+  // });
+// async function updateSavedFormsList() {
+//   const savedFormsList = document.getElementById("saveFormButton");
+//   savedFormsList.innerHTML = " ";
 
-            savedForms.push({ name: formName, data: response.formData });
-            await chrome.storage.local.set({ savedForms });
+//   const savedForms = (await chrome.storage.local.get("savedForms")).savedForms || [];
+//   savedForms.forEach((form, index) => {
+//     const li = document.createElement("li");
+//     li.textContent = form.name;
 
-            alert(`Form "${formName}" saved successfully!`);
-            updateSavedFormsList();
-          }
-        }
-      );
-    });
+//     const restoreButton = document.createElement("button");
+//     restoreButton.textContent = "Restore";
+//     restoreButton.style.marginLeft = "10px";
+//     restoreButton.addEventListener("click", () => restoreForm(form.data));
+
+//     const deleteButton = document.createElement("button");
+//     deleteButton.textContent = "Delete";
+//     deleteButton.style.marginLeft = "10px";
+//     deleteButton.addEventListener("click", async () => {
+//       savedForms.splice(index, 1);
+//       await chrome.storage.local.set({ savedForms });
+//       updateSavedFormsList();
+//     });
+
+//     li.appendChild(restoreButton);
+//     li.appendChild(deleteButton);
+//     savedFormsList.appendChild(li);
+//   });
+// }
+
+document.getElementById("GenerateCoverLetter").addEventListener("click", () => {
+  console.log("Started generating")
+  alert("Generatig...");
+  const data = JSON.stringify({
+    model: "gemma-2-27b",
+    messages: [
+      {
+        role: "user",
+        content:"Generate me a cover letter using this information: " + document.getElementById("firstName").value + "!" + document.getElementById("experience").value + "!" + document.getElementById("skills").value + "!" + document.getElementById("languages").value + "!" + document.getElementById("education").value + "!",
+      },
+    ],
   });
 
-async function updateSavedFormsList() {
-  const savedFormsList = document.getElementById("savedFormsList");
-  savedFormsList.innerHTML = "";
+  const xhr = new XMLHttpRequest();
+  xhr.withCredentials = true;
 
-  const savedForms =
-    (await chrome.storage.local.get("savedForms")).savedForms || [];
-  savedForms.forEach((form, index) => {
-    const li = document.createElement("li");
-    li.textContent = form.name;
-
-    const restoreButton = document.createElement("button");
-    restoreButton.textContent = "Restore";
-    restoreButton.style.marginLeft = "10px";
-    restoreButton.addEventListener("click", () => restoreForm(form.data));
-
-    const deleteButton = document.createElement("button");
-    deleteButton.textContent = "Delete";
-    deleteButton.style.marginLeft = "10px";
-    deleteButton.addEventListener("click", async () => {
-      savedForms.splice(index, 1);
-      await chrome.storage.local.set({ savedForms });
-      updateSavedFormsList();
-    });
-
-    li.appendChild(restoreButton);
-    li.appendChild(deleteButton);
-    savedFormsList.appendChild(li);
+  xhr.addEventListener("readystatechange", function () {
+    if (this.readyState === this.DONE) {
+      var jsonparse = JSON.parse(this.responseText);
+      document.getElementById("personalSummary").value = jsonparse["choices"][0]["message"]["content"];
+      alert("Generated");
+    }
   });
-}
 
-function restoreForm(formData) {
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    chrome.tabs.sendMessage(
-      tabs[0].id,
-      { action: "restoreFormData", formData },
-      (response) => {
-        if (chrome.runtime.lastError) {
-          console.error(
-            "Error restoring form data:",
-            chrome.runtime.lastError.message
-          );
-          alert(
-            "Failed to restore form data. Ensure the webpage supports this feature."
-          );
-        } else {
-          alert("Form data restored successfully!");
-        }
-      }
-    );
-  });
-}
+  xhr.open("POST", "https://google-gemma-2.p.rapidapi.com/");
+  xhr.setRequestHeader( "x-rapidapi-key", "09a7323ed4msh82ff902e953be64p1728d2jsn1809a8db9423");
+  xhr.setRequestHeader("x-rapidapi-host", "google-gemma-2.p.rapidapi.com");
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.send(data);
+});
 
-document.addEventListener("DOMContentLoaded", updateSavedFormsList);
+// document.addEventListener("DOMContentLoaded", updateSavedFormsList);
 
 document.addEventListener("DOMContentLoaded", () => {
   const profiles = JSON.parse(localStorage.getItem("profiles")) || {
@@ -317,19 +291,13 @@ function loadProfileData(profileData = {}) {
   document.getElementById("firstName").value = profileData.firstName || "";
   document.getElementById("lastName").value = profileData.lastName || "";
   document.getElementById("email").value = profileData.email || "";
-  document.getElementById("phone").value = profileData.phone || "";
-  document.getElementById("position").value = profileData.position || "";
-  document.getElementById("startDate").value = profileData.startDate || "";
   document.getElementById("experience").value = profileData.experience || "";
   document.getElementById("skills").value = profileData.skills || "";
   document.getElementById("education").value = profileData.education || "";
   document.getElementById("languages").value = profileData.languages || "";
-  document.getElementById("certificateLink").value =
-    profileData.certificateLink || "";
-  document.getElementById("portfolioLinks").value =
-    profileData.portfolioLinks || "";
-  document.getElementById("personalSummary").value =
-    profileData.personalSummary || "";
+  document.getElementById("certificateLinks").value = profileData.certificateLink || "";
+  document.getElementById("portfolioLinks").value = profileData.portfolioLinks || "";
+  document.getElementById("personalSummary").value = profileData.personalSummary || "";
 }
 
 document.getElementById("userForm").addEventListener("submit", (e) => {
@@ -376,17 +344,10 @@ document.getElementById("loadProfileButton").addEventListener("click", () => {
       { action: "autofillProfile", profileData },
       (response) => {
         if (chrome.runtime.lastError) {
-          console.error(
-            "Error Sending Message:",
-            chrome.runtime.lastError.message
-          );
-          alert(
-            "Failed to send profile data for autofill. Ensure the webpage supports this feature."
-          );
+          console.error("Error Sending Message:",chrome.runtime.lastError.message);
+          alert("Failed to send profile data for autofill. Ensure the webpage supports this feature.");
         } else if (response?.status === "success") {
-          alert(
-            `Profile "${activeProfile}" data loaded and autofilled successfully!`
-          );
+          alert(`Profile "${activeProfile}" data loaded and autofilled successfully!`);
         } else {
           console.error("Autofill failed:", response?.message);
           alert(`Autofill failed: ${response?.message}`);
@@ -396,50 +357,3 @@ document.getElementById("loadProfileButton").addEventListener("click", () => {
   });
 });
 
-document.getElementById("GenerateCoverLetter").addEventListener("click", () => {
-  alert("Yazir");
-  const data = JSON.stringify({
-    model: "gemma-2-27b",
-    messages: [
-      {
-        role: "user",
-        content:
-          "Generate me a cover letter using this information: " +
-          document.getElementById("firstName").value +
-          "!" +
-          document.getElementById("experience").value +
-          "!" +
-          document.getElementById("skills").value +
-          "!" +
-          document.getElementById("languages").value +
-          "!" +
-          document.getElementById("education").value +
-          "!",
-      },
-    ],
-  });
-
-  const xhr = new XMLHttpRequest();
-  xhr.withCredentials = true;
-
-  xhr.addEventListener("readystatechange", function () {
-    if (this.readyState === this.DONE) {
-      var jsonparse = JSON.parse(this.responseText);
-
-      document.getElementById("personalSummary").value =
-        jsonparse["choices"][0]["message"]["content"];
-
-      alert("Yazdi");
-    }
-  });
-
-  xhr.open("POST", "https://google-gemma-2.p.rapidapi.com/");
-  xhr.setRequestHeader(
-    "x-rapidapi-key",
-    "09a7323ed4msh82ff902e953be64p1728d2jsn1809a8db9423"
-  );
-  xhr.setRequestHeader("x-rapidapi-host", "google-gemma-2.p.rapidapi.com");
-  xhr.setRequestHeader("Content-Type", "application/json");
-
-  xhr.send(data);
-});

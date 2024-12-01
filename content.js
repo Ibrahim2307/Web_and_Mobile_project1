@@ -31,13 +31,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         for (const [key, value] of Object.entries(userData)) {
           if (typeof fieldMappings[key] !== "undefined") {
             var keywords = fieldMappings[key];
-
-            if (
-              keywords.some(
-                (keyword) =>
-                  name?.includes(keyword) || placeholder?.includes(keyword)
-              )
-            ) {
+            if (keywords.some((keyword) => name?.includes(keyword) || placeholder?.includes(keyword))) {
               console.log(`Filling ${key} with ${userData[key]}`);
               input.value = userData[key] || "";
               input.dispatchEvent(new Event("input", { bubbles: true }));
@@ -116,14 +110,11 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       firstName: ["first name", "fname", "first"],
       lastName: ["last name", "lname", "last"],
       email: ["email", "email address", "e-mail"],
-      phone: ["phone", "phone number", "contact"],
-      position: ["applied position", "job title", "position"],
-      startDate: ["start date", "earliest start date", "available date"],
       experience: ["experience", "work experience"],
       skills: ["skills", "key skills"],
       education: ["education", "degree", "academic background"],
       languages: ["languages", "spoken languages"],
-      certificateLink: ["certificate link", "certificates"],
+      certificateLinks: ["certificate link", "certificates"],
       portfolioLinks: ["portfolio links", "portfolio"],
       personalSummary: ["summary", "personal summary", "about me"],
     };
@@ -136,12 +127,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       const placeholder = input.placeholder?.toLowerCase();
 
       for (const [key, keywords] of Object.entries(fieldMappings)) {
-        if (
-          keywords.some(
-            (keyword) =>
-              name?.includes(keyword) || placeholder?.includes(keyword)
-          )
-        ) {
+        if (keywords.some( (keyword) => name?.includes(keyword) || placeholder?.includes(keyword))) {
           console.log(`Filling ${key} with ${profileData[key]}`);
           input.value = profileData[key] || "";
           input.dispatchEvent(new Event("input", { bubbles: true }));
@@ -149,7 +135,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
           break;
         }
       }
-
       console.log(key + "++++");
     });
 
