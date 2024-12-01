@@ -1,24 +1,21 @@
 {
   "manifest_version": 3,
-  "name": "Auto Form Filler Extension",
-  "version": "2.0",
-  "description": "Extension for Form filling.",
-  "permissions": ["storage", "scripting", "activeTab"],
+  "name": "Job Application Autofill",
+  "version": "1.0",
+  "description": "Autofill job application forms with saved user data.",
+  "permissions": ["storage", "activeTab", "scripting"],
   "host_permissions": ["<all_urls>"],
-  "action": {
-    "default_popup": "./popup/popup.html"
-  },
-  "icons": {
-    "48": "./icons/icon.png"
-  },
   "background": {
-    "service_worker": "./background.js"
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "icon.png"
   },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["./popup/popup.js"],
-      "run_at": "document_idle"
+      "js": ["content.js"]
     }
   ]
 }
