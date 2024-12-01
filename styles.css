@@ -1,5 +1,5 @@
 body {
-  font-family: "Arial", sans-serif;
+  font-family: 'Arial', sans-serif;
   padding: 15px;
   background-color: #f9f9f9;
   color: #333;
@@ -18,7 +18,8 @@ label {
   color: #555;
 }
 
-input, textarea {
+input,
+textarea {
   width: calc(100% - 10px);
   padding: 10px;
   margin-top: 5px;
@@ -30,7 +31,8 @@ input, textarea {
   transition: border-color 0.3s;
 }
 
-input:focus, textarea:focus {
+input:focus,
+textarea:focus {
   outline: none;
   border-color: #007bff;
 }
@@ -97,7 +99,8 @@ button:active {
   margin-bottom: 5px;
 }
 
-.field-input, .field-label-input {
+.field-input,
+.field-label-input {
   padding: 8px;
   font-size: 14px;
   border: 1px solid #ccc;
@@ -105,7 +108,8 @@ button:active {
   box-sizing: border-box;
 }
 
-.field-input:focus, .field-label-input:focus {
+.field-input:focus,
+.field-label-input:focus {
   border-color: #007bff;
   outline: none;
 }
